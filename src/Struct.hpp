@@ -1,4 +1,4 @@
-
+#pragma once
 struct Task
 {
 	int op[2];

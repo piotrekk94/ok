@@ -1,24 +1,29 @@
-#compiler
-CC=g++
-#compiler options
-OPTS=-c -Wall
-#source files
-SOURCES=$(wildcard src/*.cpp )
-#object files
-OBJECTS=$(SOURCES:.cc=.o)
-#sdl-config or any other library here. 
-#''- ensures that the command between them is executed, and the result is put into LIBS
-LIBS=
-#executable filename
-EXECUTABLE=ok
-#Special symbols used:
-#$^ - is all the dependencies (in this case =$(OBJECTS) )
-#$@ - is the result name (in this case =$(EXECUTABLE) )
 
-all: $(EXECUTABLE)
+CC=gcc
+CXX=g++
+RM=rm -f
+CPPFLAGS=-g -c -Wall -std=c++11
+LDFLAGS=-g -std=c++11
+LDLIBS=
 
-$(EXECUTABLE): $(OBJECTS)
-	$(LINK.o) $^ -o $@ $(LIBS)
+SRCS=$(wildcard src/*.cpp )
+OBJS=$(subst .cc,.o,$(SRCS))
+
+all: tool
+
+tool: $(OBJS)
+	$(CXX) $(LDFLAGS) -o ok $(OBJS) $(LDLIBS) 
+
+depend: .depend
+
+.depend: $(SRCS)
+	rm -f ./.depend
+	$(CXX) $(CPPFLAGS) -MM $^>>./.depend;
 
 clean:
-	rm $(EXECUTABLE) $(OBJECTS)
+	$(RM) $(OBJS)
+
+dist-clean: clean
+	$(RM) *~ .depend
+
+include .depend

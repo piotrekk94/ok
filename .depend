@@ -1,0 +1,5 @@
+Load.o: src/Load.cpp src/Load.hpp
+Generator.o: src/Generator.cpp src/Generator.hpp src/Struct.hpp \
+ src/Solution.hpp
+main.o: src/main.cpp src/Load.hpp src/Solution.hpp src/Struct.hpp
+Solution.o: src/Solution.cpp src/Solution.hpp src/Struct.hpp

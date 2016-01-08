@@ -1,5 +1,6 @@
 #include"Solution.hpp"
 //Solution::Solution(int size)
+//
 int Solution::Rate()
 {
 	Answer time[size];
@@ -27,7 +28,19 @@ int Solution::Rate()
 		int j=0;
 		while((i < size) || (j < size)) 
 		{
-			if ((task[answer[i].mach[0]].machine == 0) || (time[answer[i].mach[0]].mach[0] > 0)) //nie mamy op2 lub op1 wykonało się
+			if (answer[i].mach[0] == -1)
+			{
+				if (gap[0] < gap_amount[0])
+				{
+					if (machine[0] > maintance[0][gap[0]].start) printf("Solution::Rate error waiting to past event on machine[0]\n");
+					else 
+					{
+						machine[0] = maintance[0][gap[0]].end();
+						gap[0]++;
+					}
+				}
+			}
+			else if ((task[answer[i].mach[0]].machine == 0) || (time[answer[i].mach[0]].mach[0] > 0)) //nie mamy op2 lub op1 wykonało się
 			{
 				if (i < size)
 				{
@@ -46,10 +59,22 @@ int Solution::Rate()
 					if ((gap[0] < gap_amount[0]) && (maintance[0][gap[0]].start == machine[0])) machine[0]+= maintance[0][gap[0]++].length;
 					i++;
 				}
-			mach_wait[0] = 0;
+				mach_wait[0] = 0;
 			}
 			else mach_wait[0] = 1;
-			if ((task[answer[j].mach[1]].machine == 1) || (time[answer[j].mach[1]].mach[0] > 0))//nie mamy op2 lub op1 wykonało się
+			if (answer[i].mach[1] == -1)
+			{
+				if (gap[1] < gap_amount[1])
+				{
+					if (machine[1] > maintance[1][gap[1]].start) printf("Solution::Rate error waiting to past event on machine[1]\n");
+					else 
+					{
+						machine[1] = maintance[1][gap[1]].end();
+						gap[1]++;
+					}
+				}
+			}
+			else if ((task[answer[j].mach[1]].machine == 1) || (time[answer[j].mach[1]].mach[0] > 0))//nie mamy op2 lub op1 wykonało się
 			{
 				if (j < size)
 				{
@@ -69,7 +94,7 @@ int Solution::Rate()
 					if ((gap[1] < gap_amount[1]) && (maintance[1][gap[1]].start == machine[1])) machine[1]+= maintance[1][gap[1]++].length;
 					j++;
 				}
-			mach_wait[1] = 0;
+				mach_wait[1] = 0;
 			}
 			else mach_wait[1] = 1; 
 			if ((mach_wait[0] & mach_wait[1]) == 1) break;

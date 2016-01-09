@@ -4,12 +4,11 @@
 int Solution::Rate()
 {
 	Answer time[size];
-	int machine[2];
-	machine[0]=0;
-	machine[1]=0;
+	int machine[2]={0,0}; 
 	int mach_wait[2]={0,0};
 	int gap[2]={0,0};
 	int op1;
+	int par=0; //użwyane przy naprawie
 	for(int i=0; i<size ; i++) 
 	{
 	time[i].mach[0] = 0;
@@ -28,7 +27,9 @@ int Solution::Rate()
 		int j=0;
 		while((i < size) || (j < size)) 
 		{
-			if (answer[i].mach[0] == -1)
+			if (DEBUG == 2) printf("Solution::Rate i = %d\n",i);
+			if (DEBUG) printf("Solution::Rate próba zliczenia czasu na machine[0] \n");
+			if (answer[i].mach[0] == -1)//czekanie do kolejnej przerwy
 			{
 				if (gap[0] < gap_amount[0])
 				{
@@ -40,28 +41,30 @@ int Solution::Rate()
 					}
 				}
 			}
-			else if ((task[answer[i].mach[0]].machine == 0) || (time[answer[i].mach[0]].mach[0] > 0)) //nie mamy op2 lub op1 wykonało się
+			else if ((i<size) && ((task[answer[i].mach[0]].machine == 0) || (time[answer[i].mach[0]].mach[1] > 0)))//mozliwy blad
+			//nie mamy op2 lub odpowiadajace op1 wykonało się umożliwiając wykonanie op2 
+			//czas zakonczenia op1 nie jest na razie wazny pozniej go sprawdzamy i w razie czego czekamy
 			{
-				if (i < size)
-				{
-					if (machine[0] < time[answer[i].mach[0]].mach[0])//co nastapilo pozniej zakonczenie operacji poprzedniej czy powiazanej
-					{//w tym czasie nic nie robilismy
-						machine[0] = time[answer[i].mach[0]].mach[0];
-						while ((gap[0] < gap_amount[0]) && ((maintance[0][gap[0]].start) <= machine[0])) gap[0]++;
-						if ((gap[1] > 0) && (maintance[0][gap[0]-1].end() > machine[0])) machine[0] = maintance[0][gap[0]-1].end();
-					}
-					machine[0] += task[answer[i].mach[0]].op[task[answer[i].mach[0]].machine]; 
-					while ((gap[0] < gap_amount[0]) && ((maintance[0][gap[0]].start) <= machine[0]))
-					{
-						machine[0] += maintance[0][gap[0]++].length + (task[answer[i].mach[0]].op[task[answer[i].mach[0]].machine]+3)*3/10; //liczenie przerw technicznych
-					}
-					time[answer[i].mach[0]].mach[task[answer[i].mach[0]].machine] = machine[0];//czas konca
-					if ((gap[0] < gap_amount[0]) && (maintance[0][gap[0]].start == machine[0])) machine[0]+= maintance[0][gap[0]++].length;
-					i++;
+				if (machine[0] < time[answer[i].mach[0]].mach[0])//co nastapilo pozniej zakonczenie operacji poprzedniej czy powiazanej
+				{//w tym czasie nic nie robilismy
+					machine[0] = time[answer[i].mach[0]].mach[0];
+					while ((gap[0] < gap_amount[0]) && ((maintance[0][gap[0]].start) <= machine[0])) gap[0]++;
+					if ((gap[1] > 0) && (maintance[0][gap[0]-1].end() > machine[0])) machine[0] = maintance[0][gap[0]-1].end();
 				}
+				machine[0] += task[answer[i].mach[0]].op[task[answer[i].mach[0]].machine]; //op1 czy op2
+				while ((gap[0] < gap_amount[0]) && ((maintance[0][gap[0]].start) <= machine[0]))
+				{
+					machine[0] += maintance[0][gap[0]++].length + (task[answer[i].mach[0]].op[task[answer[i].mach[0]].machine]+3)*3/10; //liczenie przerw technicznych
+				}
+				time[answer[i].mach[0]].mach[0] = machine[0];//czas konca
+				if ((gap[0] < gap_amount[0]) && (maintance[0][gap[0]].start == machine[0])) machine[0]+= maintance[0][gap[0]++].length;
+				i++;
 				mach_wait[0] = 0;
+				if (DEBUG) printf("Solution::Rate próba zliczenia czasu na machine[0] zakończona\n");
 			}
 			else mach_wait[0] = 1;
+			if (DEBUG) printf("Solution::Rate próba zliczenia czasu na machine[1] \n");
+			if (DEBUG == 2) printf("Solution::Rate j = %d\n",j);
 			if (answer[i].mach[1] == -1)
 			{
 				if (gap[1] < gap_amount[1])
@@ -74,40 +77,70 @@ int Solution::Rate()
 					}
 				}
 			}
-			else if ((task[answer[j].mach[1]].machine == 1) || (time[answer[j].mach[1]].mach[0] > 0))//nie mamy op2 lub op1 wykonało się
+			else if ((j < size) && ((task[answer[j].mach[1]].machine == 1) || (time[answer[j].mach[1]].mach[0] > 0)))//mozliwy blad
+				//
+				//nie mamy op2 lub op1 wykonało się
 			{
-				if (j < size)
-				{
-					if (machine[1] < time[answer[j].mach[1]].mach[0])//co nastapilo pozniej zakonczenie operacji poprzedniej czy powiazanej
-					{//w tym czasie nic nie robilismy
-						machine[1] = time[answer[j].mach[1]].mach[0];
-						while ((gap[1] < gap_amount[1]) && ((maintance[1][gap[1]].start) <= machine[1])) gap[1]++;
-						if ((gap[1] > 0) && (maintance[1][gap[1]-1].end() > machine[1])) machine[1] = maintance[1][gap[1]-1].end();//moglibysmy zaczac gdyby nie przerwa techniczna
-					}
-					machine[1] += task[answer[j].mach[1]].op[1-task[answer[j].mach[1]].machine];
-					//liczenie przerw technicznych
-					while ((gap[1] < gap_amount[1]) && ((maintance[1][gap[1]].start) < machine[1]))
-					{
-						machine[1] += maintance[1][gap[1]++].length + (task[answer[j].mach[2]].op[1-task[answer[j].mach[1]].machine]+3)*3/10; //liczenie przerw technicznych
-					}
-					time[answer[j].mach[1]].mach[1-task[answer[j].mach[1]].machine] = machine[1];//czas konca 
-					if ((gap[1] < gap_amount[1]) && (maintance[1][gap[1]].start == machine[1])) machine[1]+= maintance[1][gap[1]++].length;
-					j++;
+				if (machine[1] < time[answer[j].mach[1]].mach[0])//co nastapilo pozniej zakonczenie operacji poprzedniej czy powiazanej
+				{//w tym czasie nic nie robilismy
+					machine[1] = time[answer[j].mach[1]].mach[0];
+					while ((gap[1] < gap_amount[1]) && ((maintance[1][gap[1]].start) <= machine[1])) gap[1]++;
+					if ((gap[1] > 0) && (maintance[1][gap[1]-1].end() > machine[1])) machine[1] = maintance[1][gap[1]-1].end();//moglibysmy zaczac gdyby nie przerwa techniczna
 				}
+				machine[1] += task[answer[j].mach[1]].op[1-task[answer[j].mach[1]].machine];
+				//liczenie przerw technicznych
+				while ((gap[1] < gap_amount[1]) && ((maintance[1][gap[1]].start) < machine[1]))
+				{
+					machine[1] += maintance[1][gap[1]++].length + (task[answer[j].mach[2]].op[1-task[answer[j].mach[1]].machine]+3)*3/10; //liczenie przerw technicznych
+				}
+				time[answer[j].mach[1]].mach[1] = machine[1];//czas konca 
+				if ((gap[1] < gap_amount[1]) && (maintance[1][gap[1]].start == machine[1])) machine[1]+= maintance[1][gap[1]++].length;
+				j++;
 				mach_wait[1] = 0;
+				if (DEBUG) printf("Solution::Rate próba zliczenia czasu na machine[1] zakończona\n");
 			}
 			else mach_wait[1] = 1; 
-			if ((mach_wait[0] & mach_wait[1]) == 1) break;
+			if ((mach_wait[0] & mach_wait[1]) == 1) //obie maszyny oczekują na wykonanie op1 trzeba naprawić odpowiedź poprzez przeniesienie jednego z op2 na koniec
+			{	//////////////////////////////////////////////////////////////////
+				if (DEBUG) printf("Solution::Rate próba naprawienia odpowiedzi\n");
+				par=1-par;
+				if (( i < size) && (par == 0))
+				{
+					int temp = answer[i].mach[0]; //
+					for(int k = i; k < (size-1); k++)
+					{
+						answer[k].mach[0]=answer[k+1].mach[0];
+					}
+					answer[size-1].mach[0]=temp;
+				}
+				else if (j < size)
+				{
+					int temp = answer[j].mach[1]; //
+					for(int k = j; k < (size-1); k++)
+					{
+						answer[k].mach[1]=answer[k+1].mach[1];
+					}
+					answer[size-1].mach[1]=temp;
+				}
+				for(int k=0; k<size ; k++)
+				{
+					printf("%d\t%d\n",answer[k].mach[0],answer[k].mach[1]);
+				}
+				if (DEBUG) printf("Solution::Rate próba naprawienia odpowiedzi zakończona\n");
+			}
 		}
 	}
-	//na tym etapie mamy czasy startu operacji2 i konca operacji1
-	//operacja1 musi konczyc sie przed rozpoczeciem operacji2
 	printf("czasy poszczegolnych operacji op1 zakonczenia op2 zakonczenia\n");
 	for(int i=0; i<size ; i++)
 	{
 		printf("%d\t%d\n",time[i].mach[0],time[i].mach[1]);
 	}
 	printf("czas pracy maszyn%d\t%d\n",machine[0],machine[1]);
+	printf("answer\n");
+	for(int i=0; i<size ; i++)
+	{
+		printf("%d\t%d\n",answer[i].mach[0],answer[i].mach[1]);
+	}
 	if ((mach_wait[0] & mach_wait[1]) == 1) return -1;
 	//for(int i=0; i<size ; i++) if (time[i].mach[0] > (time[i].mach[1] - task[i].op[1])) return i*-1;
 	if (machine[0] > machine[1]) return machine[0];

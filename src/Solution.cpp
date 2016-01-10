@@ -103,8 +103,8 @@ int Solution::Rate()
 			if ((mach_wait[0] & mach_wait[1]) == 1) //obie maszyny oczekują na wykonanie op1 trzeba naprawić odpowiedź poprzez przeniesienie jednego z op2 na koniec
 			{	//////////////////////////////////////////////////////////////////
 				if (DEBUG) printf("Solution::Rate próba naprawienia odpowiedzi\n");
-				par=1-par;
-				if (( i < size) && (par == 0))
+				//par=1-par;//zamieniał na różnych maszynach niepotrzebne teraz tylko na drugiej
+				/*if (( i < size) && (par == 0))
 				{
 					int temp = answer[i].mach[0]; //
 					for(int k = i; k < (size-1); k++)
@@ -112,8 +112,8 @@ int Solution::Rate()
 						answer[k].mach[0]=answer[k+1].mach[0];
 					}
 					answer[size-1].mach[0]=temp;
-				}
-				else if (j < size)
+				}*/
+				//else if (j < size)
 				{
 					int temp = answer[j].mach[1]; //
 					for(int k = j; k < (size-1); k++)
@@ -143,7 +143,12 @@ int Solution::Rate()
 	}
 	if ((mach_wait[0] & mach_wait[1]) == 1) return -1;
 	//for(int i=0; i<size ; i++) if (time[i].mach[0] > (time[i].mach[1] - task[i].op[1])) return i*-1;
-	if (machine[0] > machine[1]) return machine[0];
+	if (machine[0] > machine[1])
+		{
+		rate = machine[0];
+		return machine[0];
+		}
+	rate = machine[1];
 	return machine[1];
 }
 Solution::Solution(Task *task,Answer *answer,Maintance * maintance1,Maintance * maintance2,int task_size,int maintance1_size,int maintance2_size)
@@ -167,4 +172,36 @@ Solution::~Solution()
 	{
 		delete[] answer;
 	}
+}
+Solution Solution::Crossover(Solution parent)
+{
+	Solution crossovered(task,nullptr,maintance[0],maintance[1],size,gap_amount[0],gap_amount[1]);
+	int half = size/2;
+	int j=0;
+	int k=0;
+	for (int i=0; i < size ; i++) 
+	{
+		if (this->answer[i].mach[0] < half)
+		{
+		crossovered.answer[j++].mach[0]=this->answer[i].mach[0];
+		}
+		if (this->answer[i].mach[1] < half)
+		{
+		crossovered.answer[k++].mach[1]=this->answer[i].mach[1];
+		}
+	}
+	for (int i=0; i < size ; i++) 
+	{
+		if (parent.answer[i].mach[0] >= half)
+		{
+		crossovered.answer[j++].mach[0]=this->answer[i].mach[0];
+		}
+		if (this->answer[i].mach[1] >= half)
+		{
+		crossovered.answer[k++].mach[1]=this->answer[i].mach[1];
+		}
+	}
+	
+	crossovered.Rate();
+	return crossovered;
 }

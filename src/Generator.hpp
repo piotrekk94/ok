@@ -13,7 +13,7 @@ class Generator
 		Generator(int MaxLength,int MaintanceBreaks,int MaintanceBreaksAvgLength,int Tasks,int TasksAvgLength,int Population);//Przerwa techniczna nie moze sie zaczac dalej niz MaxLength
 		~Generator();
 		void GenerateInstance();
-		Solution* GenerateSolution();
+		Solution** GenerateSolution();
 	private:
 		Task	  *task;
 		Answer	  *answer;

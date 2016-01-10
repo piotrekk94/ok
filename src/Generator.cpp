@@ -32,7 +32,7 @@ void Generator::GenerateAnswers()
 {
         int i=0,j=0,k;
         int *tab=new int[Tasks];//tablica z informacja ktore zadania juz sa uporzadkowane 0-nie uporzadkowane 1-zadanie pierwsze uporzadkowane 2-uporzadkowane
-        this->answer=new Answer[Tasks];
+        answer=new Answer[Tasks];
         while(i<Tasks&&j<Tasks)
         {
             k=rand()%Tasks;
@@ -69,9 +69,9 @@ void Generator::GenerateAnswers()
             }
         }
 }
-Solution* Generator::GenerateSolution()
+Solution** Generator::GenerateSolution()
 {
-        Solution *sol=new Solution[Population];
+        Solution **sol=new Solution*[Population];
         for (int i=0;i<Population;i++)
         {
             GenerateAnswers();

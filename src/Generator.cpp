@@ -1,6 +1,6 @@
 #include "Generator.hpp"
 
-Generator::Generator(int MaxLength,int MaintanceBreaks,int MaintanceBreaksAvgLength,int Tasks,int TasksAvgLength)
+Generator::Generator(int MaxLength,int MaintanceBreaks,int MaintanceBreaksAvgLength,int Tasks,int TasksAvgLength,int Population)
 {
 	this->MaxLength=MaxLength;
 	this->MaintanceBreaks=MaintanceBreaks;
@@ -8,9 +8,9 @@ Generator::Generator(int MaxLength,int MaintanceBreaks,int MaintanceBreaksAvgLen
 	this->Tasks=Tasks;
 	this->TasksAvgLength=TasksAvgLength;
 	this->task=new Task[Tasks];
-	this->answer=new Answer[Tasks];
 	this->maint[0]=new Maintance[MaintanceBreaks];
 	this->maint[1]=new Maintance[MaintanceBreaks];
+        this->Population=Population;
 	srand(time(NULL));
 }
 void Generator::GenerateInstance()
@@ -32,6 +32,7 @@ void Generator::GenerateAnswers()
 {
         int i=0,j=0,k;
         int *tab=new int[Tasks];//tablica z informacja ktore zadania juz sa uporzadkowane 0-nie uporzadkowane 1-zadanie pierwsze uporzadkowane 2-uporzadkowane
+        answer=new Answer[Tasks];
         while(i<Tasks&&j<Tasks)
         {
             k=rand()%Tasks;
@@ -68,11 +69,15 @@ void Generator::GenerateAnswers()
             }
         }
 }
-Solution Generator::GenerateSolution()
+Solution** Generator::GenerateSolution()
 {
-	GenerateAnswers();
-	Solution solution(task,answer,maint[0],maint[1],Tasks,MaintanceBreaks,MaintanceBreaks);
-	return solution;
+        Solution **sol=new Solution*[Population];
+        for (int i=0;i<Population;i++)
+        {
+            GenerateAnswers();
+            sol[i]= new Solution(task,answer,maint[0],maint[1],Tasks,MaintanceBreaks,MaintanceBreaks);
+        }
+	return sol;
 }
 void Generator::GenerateMaintanceBreaks()
 {

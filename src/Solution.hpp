@@ -1,5 +1,6 @@
 #pragma once
 #include <cstdio>
+#include <cstring>
 #include "Struct.hpp"
 class Solution
 {
@@ -11,11 +12,13 @@ class Solution
 		Answer *answer = nullptr;
 		int rate=0;
 		int Rate();
+		void Crossover(Solution &parent,Solution &crossovered);
+		Solution operator=(Solution &from);
+		Solution();
 
 		Solution(Task *task,Answer *answer,Maintance * maintance1,Maintance * maintance2,int task_size,int maintance1_size,int maintance2_size);
 		~Solution();
 	protected:
 		int created = 0;
-		Solution Crossover(Solution parent);
 //		Solution operator=(Solution from);
 };

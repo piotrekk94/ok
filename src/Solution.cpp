@@ -175,6 +175,7 @@ Solution::Solution()
 	this->gap_amount[0]=0;
 	this->gap_amount[1]=0;
 	this->answer = nullptr;
+	linearRandom.Change(0,size);
 
 };
 Solution Solution::operator=(Solution &from)
@@ -190,6 +191,7 @@ Solution Solution::operator=(Solution &from)
 	{
 		this->answer[i]=from.answer[i];
 	}
+	linearRandom.Change(0,size);
 
 };
 Solution::Solution(Task *task,Answer *answer,Maintance * maintance1,Maintance * maintance2,int task_size,int maintance1_size,int maintance2_size)
@@ -210,6 +212,7 @@ Solution::Solution(Task *task,Answer *answer,Maintance * maintance1,Maintance * 
 		}
 		//		memcpy(this->answer,answer,sizeof(Answer[task_size]));
 	}
+	linearRandom.Change(0,size);
 }
 Solution::~Solution()
 {
@@ -220,6 +223,34 @@ Solution::~Solution()
 		delete [] (this->answer);//<--z tym jest błąd
 		this->answer=nullptr;
 	}
+}
+void Solution::Mutate(Solution &solution,int machine)
+{
+	int a= linearRandom.Rand();
+	int b= linearRandom.Rand();
+	int temp;
+	temp = answer[a].mach[machine];
+	answer[a].mach[machine] = answer[b].mach[machine];
+	answer[b].mach[machine] = temp;
+	solution.Rate();
+}
+void Solution::MultiMutate(Solution &solution,int machine,int MutationAmount)
+{
+	for(int i=0; i<MutationAmount ; i++) 
+	{
+	Mutate(solution,machine);
+	}
+}
+Solution* Solution::Tournament(Solution *solution_table, int amount)//chyba lepiej bedzie to zrobic poza klasa
+{
+	Solution *winner;
+	for(int i=0; i <amount ; i++) 
+	{
+	winner=solution_table;
+	if (winner->rate < solution_table[i].rate) winner=&(solution_table[i]);
+	}
+	return (winner);
+
 }
 void Solution::Crossover(Solution &parent,Solution &crossovered)
 {
@@ -254,4 +285,8 @@ void Solution::Crossover(Solution &parent,Solution &crossovered)
 
 	crossovered.Rate();
 	
+}
+int Solution::getRate()
+{
+return rate;
 }

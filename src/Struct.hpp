@@ -1,4 +1,5 @@
 #pragma once
+#define DEBUG 0
 struct Task
 {
 	int op[2];

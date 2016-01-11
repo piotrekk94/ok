@@ -54,7 +54,7 @@ int main(int argc,char** argv)
 	solution.Crossover(solution2,solutionc);
 	solutionr.~Solution();
 //	solution2.answer->mach[0]=0;
-	for(int i=0; i<5 ; i++) printf("%d\t%d\n",solution2.answer[i].mach[0],solution2.answer[i].mach[1]);
+//	for(int i=0; i<5 ; i++) printf("%d\t%d\n",solution2.answer[i].mach[0],solution2.answer[i].mach[1]);
 
 	printf("%d\n",solution.Rate());
 	printf("%d\n",solution2.Rate());

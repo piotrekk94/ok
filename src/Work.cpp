@@ -24,6 +24,7 @@ void Work::MainLoop(int Duration)
     time(&end);
     while(end-start<Duration)
     {
+        printf("Populacja %d\n",solutions.size());
         Mutations();
         printf("Mutacje\n" );
         Crossingover();
@@ -58,9 +59,10 @@ void Work::Tournament()
     for (int i=0;i<groups.size();i++)
     {
       int max=0;
-      for (int j=0;j<tournament_groupsize;j++)
+      int size=groups[i].size();
+      for (int j=0;j<size;j++)
         max = solutions[groups[i][j]].getRate() > solutions[groups[i][max]].getRate() ? j : max;
-      for (int j=0;j<tournament_groupsize;j++)
+      for (int j=0;j<size;j++)
         if (j!=max)solutions.erase(solutions.begin()+groups[i][j]);
     }
     delete tab;

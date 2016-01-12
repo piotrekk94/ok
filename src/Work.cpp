@@ -7,7 +7,7 @@ Work::Work()
   survival_amount=ld.file_data.survival_amount;
   mutation_percent=ld.file_data.mutation_percent;
   crossover_percent=ld.file_data.crossover_percent;
-  tournament_groupsize=4;
+  tournament_groupsize=3;
 }
 
 void Work::Start(int MaxLength,int MaintanceBreaks,int MaintanceBreaksAvgLength,int Tasks,int TasksAvgLength,int Duration)
@@ -72,10 +72,10 @@ void Work::Mutations()
 {
   Random rand(0,solutions.size()-1);
   int size=solutions.size();
-  for (int i=0;i<mutation_percent*size;i++)
+  for (int i=0;i<mutation_percent*size/100;i++)
   {
       int j=rand.Rand();
-      //solutions.insert(solutions.end(),solutions[j]);
+      solutions.insert(solutions.end(),solutions[j]);
       solutions[j].Mutate(rand.Rand()%2);
   }
 }
@@ -84,11 +84,11 @@ void Work::Crossingover()
 {
   Random rand(0,solutions.size()-1);
   int size=solutions.size();
-  for (int i=0;i<crossover_percent*size;i++)
+  for (int i=0;i<crossover_percent*size/100;i++)
   {
       int j=rand.Rand();
       int k=rand.Rand();
-      //solutions.insert(solutions.end(),solutions[j]);
+      solutions.insert(solutions.end(),solutions[j]);
       solutions[j].Crossover(solutions[j],solutions[k]);
   }
 }

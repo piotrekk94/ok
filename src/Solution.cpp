@@ -231,7 +231,7 @@ void Solution::Mutate(int machine)
 	temp = answer[a].mach[machine];
 	answer[a].mach[machine] = answer[b].mach[machine];
 	answer[b].mach[machine] = temp;
-	Rate();
+	//Rate();
 }
 void Solution::MultiMutate(int machine,int MutationAmount)
 {

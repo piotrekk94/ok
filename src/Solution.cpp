@@ -43,7 +43,10 @@ int Solution::Rate()
 			{
 				if (gap[0] < gap_amount[0])
 				{
-					if (machine[0] > maintance[0][gap[0]].start) printf("Solution::Rate error waiting to past event on machine[0]\n");
+					if (machine[0] > maintance[0][gap[0]].start) 
+					{
+						if (DEBUG) printf("Solution::Rate error waiting to past event on machine[0]\n");
+					}
 					else 
 					{
 						machine[0] = maintance[0][gap[0]].end();
@@ -80,7 +83,10 @@ int Solution::Rate()
 			{
 				if (gap[1] < gap_amount[1])
 				{
-					if (machine[1] > maintance[1][gap[1]].start) printf("Solution::Rate error waiting to past event on machine[1]\n");
+					if (machine[1] > maintance[1][gap[1]].start) 
+					{
+					if (DEBUG) printf("Solution::Rate error waiting to past event on machine[1]\n");
+					}
 					else 
 					{
 						machine[1] = maintance[1][gap[1]].end();
@@ -145,16 +151,19 @@ int Solution::Rate()
 			}
 		}
 	}
-	printf("czasy poszczegolnych operacji op1 zakonczenia op2 zakonczenia\n");
-	for(int i=0; i<size ; i++)
+	if (DEBUG)
 	{
-		printf("%d\t%d\n",time[i].mach[0],time[i].mach[1]);
-	}
-	printf("czas pracy maszyn%d\t%d\n",machine[0],machine[1]);
-	printf("answer\n");
-	for(int i=0; i<size ; i++)
-	{
-		printf("%d\t%d\n",answer[i].mach[0],answer[i].mach[1]);
+		printf("czasy poszczegolnych operacji op1 zakonczenia op2 zakonczenia\n");
+		for(int i=0; i<size ; i++)
+		{
+			printf("%d\t%d\n",time[i].mach[0],time[i].mach[1]);
+		}
+		printf("czas pracy maszyn%d\t%d\n",machine[0],machine[1]);
+		printf("answer\n");
+		for(int i=0; i<size ; i++)
+		{
+			printf("%d\t%d\n",answer[i].mach[0],answer[i].mach[1]);
+		}
 	}
 	if ((mach_wait[0] & mach_wait[1]) == 1) return -1;
 	//for(int i=0; i<size ; i++) if (time[i].mach[0] > (time[i].mach[1] - task[i].op[1])) return i*-1;
@@ -166,7 +175,7 @@ int Solution::Rate()
 	rate = machine[1];
 	return machine[1];
 }
-Solution::Solution()
+Solution::Solution() : linearRandom()
 {
 	this->task=nullptr;
 	this->size=0;
@@ -174,11 +183,10 @@ Solution::Solution()
 	this->maintance[1]=nullptr;
 	this->gap_amount[0]=0;
 	this->gap_amount[1]=0;
-	this->answer = nullptr;
 	linearRandom.Change(0,size);
 
 };
-Solution Solution::operator=(Solution &from)
+Solution& Solution::operator=(Solution &from)
 {
 	this->task=from.task;
 	this->size=from.size;
@@ -186,15 +194,12 @@ Solution Solution::operator=(Solution &from)
 	this->maintance[1]=from.maintance[1];
 	this->gap_amount[0]=from.gap_amount[0];
 	this->gap_amount[1]=from.gap_amount[1];
-	if (this->answer==nullptr) this->answer = new Answer[this->size];
-	for(int i=0; i<size ; i++)
-	{
-		this->answer[i]=from.answer[i];
-	}
+	this->answer=from.answer;
 	linearRandom.Change(0,size);
-
+	return *this;
 };
-Solution::Solution(Task *task,Answer *answer,Maintance * maintance1,Maintance * maintance2,int task_size,int maintance1_size,int maintance2_size)
+Solution::Solution(Task *task,std::vector<Answer> *answer,Maintance * maintance1,Maintance * maintance2,int task_size,int maintance1_size,int maintance2_size) : linearRandom()
+
 {
 	this->task=task;
 	this->size=task_size;
@@ -202,28 +207,15 @@ Solution::Solution(Task *task,Answer *answer,Maintance * maintance1,Maintance * 
 	this->maintance[1]=maintance2;
 	this->gap_amount[0]=maintance1_size;
 	this->gap_amount[1]=maintance2_size;
-	this->answer = new Answer[task_size];
-	created=1;
-	if (answer != nullptr) 
-	{
-		for(int i=0; i<size ; i++)
-		{
-			this->answer[i]=answer[i];
-		}
-		//		memcpy(this->answer,answer,sizeof(Answer[task_size]));
-	}
+	this->answer=*answer;
 	linearRandom.Change(0,size);
 }
+/*
 Solution::~Solution()
 {
-		printf("elo from destructor\n");
-	if (created)
-	{
-		created=0;
-		delete [] (this->answer);//<--z tym jest błąd
-		this->answer=nullptr;
-	}
+	if (DEBUG) printf("elo from destructor\n");
 }
+*/
 void Solution::Mutate(Solution &solution,int machine)
 {
 	int a= linearRandom.Rand();
@@ -238,7 +230,7 @@ void Solution::MultiMutate(Solution &solution,int machine,int MutationAmount)
 {
 	for(int i=0; i<MutationAmount ; i++) 
 	{
-	Mutate(solution,machine);
+		Mutate(solution,machine);
 	}
 }
 Solution* Solution::Tournament(Solution *solution_table, int amount)//chyba lepiej bedzie to zrobic poza klasa
@@ -246,16 +238,16 @@ Solution* Solution::Tournament(Solution *solution_table, int amount)//chyba lepi
 	Solution *winner;
 	for(int i=0; i <amount ; i++) 
 	{
-	winner=solution_table;
-	if (winner->rate < solution_table[i].rate) winner=&(solution_table[i]);
+		winner=solution_table;
+		if (winner->rate < solution_table[i].rate) winner=&(solution_table[i]);
 	}
 	return (winner);
 
 }
 void Solution::Crossover(Solution &parent,Solution &crossovered)
 {
-//	Solution crossovered;
-//	Solution crossovered(task,nullptr,maintance[0],maintance[1],size,gap_amount[0],gap_amount[1]);
+	//	Solution crossovered;
+	//	Solution crossovered(task,nullptr,maintance[0],maintance[1],size,gap_amount[0],gap_amount[1]);
 	crossovered=parent;
 	int half = size/2;
 	int j=0;
@@ -284,9 +276,14 @@ void Solution::Crossover(Solution &parent,Solution &crossovered)
 	}
 
 	crossovered.Rate();
-	
+
 }
 int Solution::getRate()
 {
-return rate;
+	return rate;
+}
+void Solution::PrintAnswers()
+{
+	for(int i=0; i<size ; i++)
+		printf("%d\t%d\n",answer[i].mach[0],answer[i].mach[1]);
 }

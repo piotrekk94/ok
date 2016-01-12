@@ -2,6 +2,7 @@
 #include <cstdio>
 #include <cstring>
 #include <vector>
+#include <memory>
 #include "Struct.hpp"
 #include "Random.hpp"
 class Solution
@@ -16,7 +17,7 @@ class Solution
 		int Rate();//zapisuje wartość w rate
 		void PrintAnswers();
 		void Crossover(Solution &parent,Solution &crossovered);//wylicza wartość nowo stworzonej odpowiedzi
-		Solution& operator=(Solution &from);
+	//	Solution& operator=(Solution &from);
 		void Mutate(int machine);
 		void MultiMutate(int machine,int MutationAmount);
 		Solution* Tournament(Solution *solution_table, int amount);//chyba lepiej bedzie to zrobic poza klasa
@@ -24,10 +25,9 @@ class Solution
 		Solution();
 		Solution(Task *task,std::vector<Answer> *answer,Maintance * maintance1,Maintance * maintance2,int task_size,int maintance1_size,int maintance2_size);
 		Solution(Task *task,Answer *answer,Maintance * maintance1,Maintance * maintance2,int task_size,int maintance1_size,int maintance2_size){};
-//		~Solution();
 	protected:
 		int size;
-		Random linearRandom; 
+		std::shared_ptr<Random> linearRandom; 
 		int rate=0;
 		std::vector<Answer> answer;
 		int created = 0;

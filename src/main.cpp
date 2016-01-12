@@ -60,8 +60,8 @@ int main(int argc,char** argv)
 	int c=1;
 	while(c == 1)
 	{
-		solution.Mutate(1);
-		solution.PrintAnswers();
+//		solution.Mutate(1);
+//		solution.PrintAnswers();
 		scanf("%d",&c);
 	}
 	return 0;

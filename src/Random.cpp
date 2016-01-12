@@ -5,25 +5,26 @@ int Random::Rand()
 }
 Random::~Random()
 {
-	delete prandom;
-	delete distribution;
 	printf("Random::~Randmo\n");
 }
 
-Random::Random() : rd()
+Random::Random() :rd(new std::random_device)
 {
 	printf("Random::Randmo\n");
-	prandom = new std::default_random_engine(rd());
+	std::shared_ptr<std::default_random_engine> temp( new std::default_random_engine((*rd)()));
+	prandom=temp;
 	distribution=nullptr;
 }
-Random::Random(int lower, int upper) : rd()
+Random::Random(int lower, int upper)  :rd(new std::random_device)
 {
-	prandom = new std::default_random_engine(rd());
-	distribution = new std::uniform_int_distribution<int>(lower,upper);
+	std::shared_ptr<std::default_random_engine> temp( new std::default_random_engine((*rd)()));
+	prandom=temp;
+	std::shared_ptr<std::uniform_int_distribution<int>> temp2(new std::uniform_int_distribution<int>(lower,upper));
+	distribution=temp2;
 }
 void Random::Change(int lower, int upper)
 {
-	delete distribution;
-	distribution = new std::uniform_int_distribution<int>(lower,upper);
+	std::shared_ptr<std::uniform_int_distribution<int>> temp2(new std::uniform_int_distribution<int>(lower,upper));
+	distribution=temp2;
 
 }

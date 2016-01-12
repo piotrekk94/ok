@@ -175,7 +175,7 @@ int Solution::Rate()
 	rate = machine[1];
 	return machine[1];
 }
-Solution::Solution() : linearRandom()
+Solution::Solution() : linearRandom(new Random)
 {
 	this->task=nullptr;
 	this->size=0;
@@ -183,9 +183,10 @@ Solution::Solution() : linearRandom()
 	this->maintance[1]=nullptr;
 	this->gap_amount[0]=0;
 	this->gap_amount[1]=0;
-	linearRandom.Change(0,size-1);
+	(*linearRandom).Change(0,size-1);
 
-};
+}
+/*
 Solution& Solution::operator=(Solution &from)
 {
 	this->task=from.task;
@@ -197,8 +198,9 @@ Solution& Solution::operator=(Solution &from)
 	this->answer=from.answer;
 	linearRandom.Change(0,size-1);
 	return *this;
-};
-Solution::Solution(Task *task,std::vector<Answer> *answer,Maintance * maintance1,Maintance * maintance2,int task_size,int maintance1_size,int maintance2_size) : linearRandom()
+}
+*/
+Solution::Solution(Task *task,std::vector<Answer> *answer,Maintance * maintance1,Maintance * maintance2,int task_size,int maintance1_size,int maintance2_size) : linearRandom(new Random)
 
 {
 	this->task=task;
@@ -208,7 +210,7 @@ Solution::Solution(Task *task,std::vector<Answer> *answer,Maintance * maintance1
 	this->gap_amount[0]=maintance1_size;
 	this->gap_amount[1]=maintance2_size;
 	this->answer=*answer;
-	linearRandom.Change(0,size-1);
+	(*linearRandom).Change(0,size-1);
 }
 /*
 Solution::~Solution()
@@ -219,8 +221,8 @@ Solution::~Solution()
 void Solution::Mutate(int machine)
 {
 	if (DEBUG==2) printf("Solution::Mutate\n");
-	int a= linearRandom.Rand();
-	int b= linearRandom.Rand();
+	int a= (*linearRandom).Rand();
+	int b= (*linearRandom).Rand();
 	if (DEBUG)
 	{
 		if ((a>size) || (b>size)) printf("a lub b za duże a:%d b:%d size:%d\n",a,b,size);

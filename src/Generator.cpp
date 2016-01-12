@@ -13,11 +13,10 @@ Generator::Generator(int MaxLength,int MaintanceBreaks,int MaintanceBreaksAvgLen
         this->Population=Population;
 	srand(time(NULL));
         GenerateInstance();
-        printf("Wygenerowano instancje\n");
 }
 Generator::~Generator()
 {
-    
+
 }
 void Generator::GenerateInstance()
 {
@@ -26,11 +25,12 @@ void Generator::GenerateInstance()
 }
 void Generator::GenerateTasks()
 {
+	Random op(TasksAvgLength*(1-MAX_DEVIATION_FROM_AVG),TasksAvgLength*(1+MAX_DEVIATION_FROM_AVG));
 	for(int i=0;i<Tasks;i++)
 		{
 			task[i].machine=rand()%2;
-			task[i].op[0]=TasksAvgLength*(1-MAX_DEVIATION_FROM_AVG)+rand()%int(2*MAX_DEVIATION_FROM_AVG*TasksAvgLength);
-			task[i].op[1]=TasksAvgLength*(1-MAX_DEVIATION_FROM_AVG)+rand()%int(2*MAX_DEVIATION_FROM_AVG*TasksAvgLength);
+			task[i].op[0]=op.Rand();
+			task[i].op[1]=op.Rand();
 		}
 }
 std::vector<Answer> Generator::GenerateAnswers()
@@ -41,7 +41,7 @@ std::vector<Answer> Generator::GenerateAnswers()
         Answer temp={.mach={0,0}};
         std::vector<Answer> answer;
         answer.insert(answer.begin(),Tasks,temp);
-        while(i<Tasks&&j<Tasks)
+        while(i<Tasks||(j<Tasks))
         {
             k=rand()%Tasks;
             if(task[k].machine==0)
@@ -58,19 +58,19 @@ std::vector<Answer> Generator::GenerateAnswers()
                     j++;
                     tab[k]++;
                 }
-                
+
             }
             else if(task[k].machine==1)
             {
                 if (tab[k]==0)
                 {
-                    answer[k].mach[0]=j;
+                    answer[k].mach[1]=j;
                     j++;
                     tab[k]++;
                 }
                 else if (tab[k]==1)
                 {
-                    answer[k].mach[1]=i;
+                    answer[k].mach[0]=i;
                     i++;
                     tab[k]++;
                 }
@@ -82,59 +82,61 @@ std::vector<Answer> Generator::GenerateAnswers()
 std::vector<Solution> Generator::GenerateSolution()
 {
         std::vector<Solution> result;
-        printf("Solucje");
         for (int i=0;i<Population;i++)
         {
             std::vector<Answer> *temp=new std::vector<Answer>;
             *temp=GenerateAnswers();
             Solution sol(task,temp,maint[0],maint[1],Tasks,MaintanceBreaks,MaintanceBreaks);
             result.push_back(sol);
-            printf("Wygenerowano %d solucje\n",i);
         }
 	return result;
 }
 void Generator::GenerateMaintanceBreaks()
 {
-	bool ok=false;
-        printf("Przerwy\n");
+	Random length(MaintanceBreaksAvgLength*(1-MAX_DEVIATION_FROM_AVG),MaintanceBreaksAvgLength*(1+MAX_DEVIATION_FROM_AVG));
+	Random start(0,MaxLength);
 	for (int i=0;i<MaintanceBreaks;i++)
 	{
+		bool ok=false;
 		while(!ok)
 		{
-		maint[0][i].start=rand()%MaxLength;
-		maint[0][i].length=MaintanceBreaksAvgLength*(1-MAX_DEVIATION_FROM_AVG)+rand()%int(2*MAX_DEVIATION_FROM_AVG*MaintanceBreaksAvgLength);
-                if (i==0)ok=true;
-		for (int j=0;j<i;j++)
-		{
-                        printf("%d %d\n",i,j);
-			if ((maint[0][i].start<maint[0][j].start&&maint[0][i].end()<maint[0][j].start)||(maint[0][i].start>maint[0][j].end()&&maint[0][i].end()>maint[0][j].end()))
-				ok=true;
-			else
+			maint[0][i].start=start.Rand();
+			maint[0][i].length=length.Rand();
+  		if (i==0)ok=true;
+			for (int j=0;j<i;j++)
 			{
-				ok=false;
-				break;
+				if (maint[0][i].end()<maint[0][j].start||maint[0][i].start>maint[0][j].end())
+					ok=true;
+				else
+				{
+					ok=false;
+					break;
+				}
 			}
-		}
 		}
 	}
-	ok=false;
 	for (int i=0;i<MaintanceBreaks;i++)
 	{
+		bool ok=false;
 		while(!ok)
 		{
-		maint[1][i].start=rand()%MaxLength;
-		maint[1][i].length=MaintanceBreaksAvgLength*(1-MAX_DEVIATION_FROM_AVG)+rand()%int(2*MAX_DEVIATION_FROM_AVG*MaintanceBreaksAvgLength);
-                if (i==0)ok=true;
-		for (int j=0;j<i;j++)
-		{
-			if ((maint[1][i].start<maint[1][j].start&&maint[1][i].end()<maint[1][j].start)||(maint[1][i].start>maint[1][j].end()&&maint[1][i].end()>maint[1][j].end()))
-				ok=true;
-			else
+			maint[1][i].start=start.Rand();
+			maint[1][i].length=length.Rand();
+    	if (i==0)ok=true;
+			for (int j=0;j<i;j++)
 			{
-				ok=false;
-				break;
+				if (maint[1][i].end()<maint[1][j].start||maint[1][i].start>maint[1][j].end())
+					ok=true;
+				else
+				{
+					ok=false;
+					break;
+				}
 			}
 		}
-		}
+	}
+	for (int i=0;i<MaintanceBreaks;i++)
+	{
+		printf("%d %d %d %d\n",maint[0][i].start,maint[0][i].end(),maint[1][i].start,maint[1][i].end() );
 	}
 }

@@ -3,6 +3,7 @@
 #include <cstdlib>
 #include "Struct.hpp"
 #include "Solution.hpp"
+#include "Random.hpp"
 #include "time.h"
 
 #define MAX_DEVIATION_FROM_AVG 0.2

@@ -5,12 +5,12 @@ int Random::Rand()
 }
 Random::~Random()
 {
-	printf("Random::~Randmo\n");
+	//printf("Random::~Randmo\n");
 }
 
 Random::Random() :rd(new std::random_device)
 {
-	printf("Random::Randmo\n");
+	//printf("Random::Randmo\n");
 	std::shared_ptr<std::default_random_engine> temp( new std::default_random_engine((*rd)()));
 	prandom=temp;
 	distribution=nullptr;

@@ -4,12 +4,12 @@
 int Solution::Rate()
 {
 	Answer time[size];
-	int machine[2]={0,0}; 
+	int machine[2]={0,0};
 	int mach_wait[2]={0,0};
 	int gap[2]={0,0};
 	int op1;
 	int par=0; //użwyane przy naprawie
-	for(int i=0; i<size ; i++) 
+	for(int i=0; i<size ; i++)
 	{
 	time[i].mach[0] = 0;
 	time[i].mach[1] = 0;
@@ -28,7 +28,7 @@ int Solution::Rate()
 	{
 		int i=0;
 		int j=0;
-		while((i < size) || (j < size)) 
+		while((i < size) || (j < size))
 		{
 			if (DEBUG == 2)
 			{
@@ -43,11 +43,11 @@ int Solution::Rate()
 			{
 				if (gap[0] < gap_amount[0])
 				{
-					if (machine[0] > maintance[0][gap[0]].start) 
+					if (machine[0] > maintance[0][gap[0]].start)
 					{
 						if (DEBUG) printf("Solution::Rate error waiting to past event on machine[0]\n");
 					}
-					else 
+					else
 					{
 						machine[0] = maintance[0][gap[0]].end();
 						gap[0]++;
@@ -55,7 +55,7 @@ int Solution::Rate()
 				}
 			}
 			else if ((i<size) && ((task[answer[i].mach[0]].machine == 0) || (time[answer[i].mach[0]].mach[1] > 0)))//mozliwy blad
-				//nie mamy op2 lub odpowiadajace op1 wykonało się umożliwiając wykonanie op2 
+				//nie mamy op2 lub odpowiadajace op1 wykonało się umożliwiając wykonanie op2
 				//czas zakonczenia op1 nie jest na razie wazny pozniej go sprawdzamy i w razie czego czekamy
 			{
 				if (machine[0] < time[answer[i].mach[0]].mach[1])//co nastapilo pozniej zakonczenie operacji poprzedniej czy powiazanej
@@ -83,11 +83,11 @@ int Solution::Rate()
 			{
 				if (gap[1] < gap_amount[1])
 				{
-					if (machine[1] > maintance[1][gap[1]].start) 
+					if (machine[1] > maintance[1][gap[1]].start)
 					{
 					if (DEBUG) printf("Solution::Rate error waiting to past event on machine[1]\n");
 					}
-					else 
+					else
 					{
 						machine[1] = maintance[1][gap[1]].end();
 						gap[1]++;
@@ -111,13 +111,13 @@ int Solution::Rate()
 				{
 					machine[1] += maintance[1][gap[1]++].length; //liczenie przerw technicznych
 				}
-				time[answer[j].mach[1]].mach[1] = machine[1];//czas konca 
+				time[answer[j].mach[1]].mach[1] = machine[1];//czas konca
 				if ((gap[1] < gap_amount[1]) && (maintance[1][gap[1]].start == machine[1]) && (j != (size -1))) machine[1]+= maintance[1][gap[1]++].length;
 				j++;
 				mach_wait[1] = 0;
 				if (DEBUG) printf("Solution::Rate próba zliczenia czasu na machine[1] zakończona\n");
 			}
-			else mach_wait[1] = 1; 
+			else mach_wait[1] = 1;
 			if ((mach_wait[0] & mach_wait[1]) == 1) //obie maszyny oczekują na wykonanie op1 trzeba naprawić odpowiedź poprzez przeniesienie jednego z op2 na koniec
 			{	//////////////////////////////////////////////////////////////////
 				if (DEBUG) printf("Solution::Rate próba naprawienia odpowiedzi\n");
@@ -235,7 +235,7 @@ void Solution::Mutate(int machine)
 }
 void Solution::MultiMutate(int machine,int MutationAmount)
 {
-	for(int i=0; i<MutationAmount ; i++) 
+	for(int i=0; i<MutationAmount ; i++)
 	{
 		Mutate(machine);
 	}
@@ -243,7 +243,7 @@ void Solution::MultiMutate(int machine,int MutationAmount)
 Solution* Solution::Tournament(Solution *solution_table, int amount)//chyba lepiej bedzie to zrobic poza klasa
 {
 	Solution *winner;
-	for(int i=0; i <amount ; i++) 
+	for(int i=0; i <amount ; i++)
 	{
 		winner=solution_table;
 		if (winner->rate < solution_table[i].rate) winner=&(solution_table[i]);
@@ -259,7 +259,7 @@ void Solution::Crossover(Solution &parent,Solution &crossovered)
 	int half = size/2;
 	int j=0;
 	int k=0;
-	for (int i=0; i < size ; i++) 
+	for (int i=0; i < size ; i++)
 	{
 		if (this->answer[i].mach[0] < half)
 		{
@@ -270,7 +270,7 @@ void Solution::Crossover(Solution &parent,Solution &crossovered)
 			crossovered.answer[k++].mach[1]=this->answer[i].mach[1];
 		}
 	}
-	for (int i=0; i < size ; i++) 
+	for (int i=0; i < size ; i++)
 	{
 		if (parent.answer[i].mach[0] >= half)
 		{

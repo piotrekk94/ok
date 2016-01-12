@@ -1,6 +1,34 @@
 #include"Solution.hpp"
 //Solution::Solution(int size)
 //
+int Solution::BasicCheck()
+{
+	Answer check[size];
+	for(int i=0; ; i++) 
+	{
+		check[answer[i].mach[0]].mach[0]=0;
+		check[answer[i].mach[1]].mach[1]=0;
+	}
+	for(int i=0; ; i++) 
+	{
+		++(check[answer[i].mach[0]].mach[0]);
+		++(check[answer[i].mach[1]].mach[1]);
+	}
+	for(int i=0; ; i++) 
+	{
+		if ((check[answer[i].mach[0]].mach[0]) != 1) 
+		{
+			if (DEBUG) printf("Solution::BasicCheck error\n");
+			return 1;
+		}
+		if ((check[answer[i].mach[1]].mach[1]) != 1)
+		{
+			if (DEBUG) printf("Solution::BasicCheck error\n");
+			return 1;
+		}
+		return 0;
+	}
+}
 int Solution::Rate()
 {
 	Answer time[size];
@@ -11,9 +39,10 @@ int Solution::Rate()
 	int par=0; //użwyane przy naprawie
 	for(int i=0; i<size ; i++)
 	{
-	time[i].mach[0] = 0;
-	time[i].mach[1] = 0;
+		time[i].mach[0] = 0;
+		time[i].mach[1] = 0;
 	}
+	BasicCheck();
 	if (DEBUG)
 	{
 		for(int i=0; i<size ; i++)
@@ -85,7 +114,7 @@ int Solution::Rate()
 				{
 					if (machine[1] > maintance[1][gap[1]].start)
 					{
-					if (DEBUG) printf("Solution::Rate error waiting to past event on machine[1]\n");
+						if (DEBUG) printf("Solution::Rate error waiting to past event on machine[1]\n");
 					}
 					else
 					{
@@ -123,14 +152,14 @@ int Solution::Rate()
 				if (DEBUG) printf("Solution::Rate próba naprawienia odpowiedzi\n");
 				//par=1-par;//zamieniał na różnych maszynach niepotrzebne teraz tylko na drugiej
 				//if (( i < size) && (par == 0))
-//				  {
-//				  int temp = answer[i].mach[0]; //
-//				  for(int k = i; k < (size-1); k++)
-//				  {
-//				  answer[k].mach[0]=answer[k+1].mach[0];
-//				  }
-//				  answer[size-1].mach[0]=temp;
-//				  }
+				//				  {
+				//				  int temp = answer[i].mach[0]; //
+				//				  for(int k = i; k < (size-1); k++)
+				//				  {
+				//				  answer[k].mach[0]=answer[k+1].mach[0];
+				//				  }
+				//				  answer[size-1].mach[0]=temp;
+				//				  }
 				//else if (j < size)
 				{
 					int temp = answer[j].mach[1]; //
@@ -187,19 +216,19 @@ Solution::Solution() : linearRandom(new Random)
 
 }
 /*
-Solution& Solution::operator=(Solution &from)
-{
-	this->task=from.task;
-	this->size=from.size;
-	this->maintance[0]=from.maintance[0];
-	this->maintance[1]=from.maintance[1];
-	this->gap_amount[0]=from.gap_amount[0];
-	this->gap_amount[1]=from.gap_amount[1];
-	this->answer=from.answer;
-	linearRandom.Change(0,size-1);
-	return *this;
-}
-*/
+   Solution& Solution::operator=(Solution &from)
+   {
+   this->task=from.task;
+   this->size=from.size;
+   this->maintance[0]=from.maintance[0];
+   this->maintance[1]=from.maintance[1];
+   this->gap_amount[0]=from.gap_amount[0];
+   this->gap_amount[1]=from.gap_amount[1];
+   this->answer=from.answer;
+   linearRandom.Change(0,size-1);
+   return *this;
+   }
+ */
 Solution::Solution(Task *task,std::vector<Answer> *answer,Maintance * maintance1,Maintance * maintance2,int task_size,int maintance1_size,int maintance2_size) : linearRandom(new Random)
 
 {
@@ -213,11 +242,11 @@ Solution::Solution(Task *task,std::vector<Answer> *answer,Maintance * maintance1
 	(*linearRandom).Change(0,size-1);
 }
 /*
-Solution::~Solution()
-{
-	if (DEBUG) printf("elo from destructor\n");
-}
-*/
+   Solution::~Solution()
+   {
+   if (DEBUG) printf("elo from destructor\n");
+   }
+ */
 void Solution::Mutate(int machine)
 {
 	if (DEBUG==2) printf("Solution::Mutate\n");

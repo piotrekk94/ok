@@ -26,8 +26,8 @@ int Solution::BasicCheck()
 			if (DEBUG) printf("Solution::BasicCheck error\n");
 			return 1;
 		}
-		return 0;
 	}
+	return 0;
 }
 int Solution::Rate()
 {

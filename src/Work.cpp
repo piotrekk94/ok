@@ -25,8 +25,11 @@ void Work::MainLoop(int Duration)
     while(end-start<Duration)
     {
         Mutations();
+        printf("Mutacje\n" );
         Crossingover();
+        printf("Krzyzowanie\n" );
         Tournament();
+        printf("Turniej\n");
         time(&end);
         printf("Minelo %d\n", end-start);
     }
@@ -66,7 +69,8 @@ void Work::Tournament()
 void Work::Mutations()
 {
   Random rand(0,solutions.size()-1);
-  for (int i=0;i<mutation_percent*solutions.size();i++)
+  int size=solutions.size();
+  for (int i=0;i<mutation_percent*size;i++)
   {
       int j=rand.Rand();
       solutions.insert(solutions.end(),solutions[j]);
@@ -77,7 +81,8 @@ void Work::Mutations()
 void Work::Crossingover()
 {
   Random rand(0,solutions.size()-1);
-  for (int i=0;i<crossover_percent*solutions.size();i++)
+  int size=solutions.size();
+  for (int i=0;i<crossover_percent*size;i++)
   {
       int j=rand.Rand();
       int k=rand.Rand();

@@ -75,7 +75,7 @@ void Work::Mutations()
   for (int i=0;i<mutation_percent*size;i++)
   {
       int j=rand.Rand();
-      solutions.insert(solutions.end(),solutions[j]);
+      //solutions.insert(solutions.end(),solutions[j]);
       solutions[j].Mutate(rand.Rand()%2);
   }
 }
@@ -88,7 +88,7 @@ void Work::Crossingover()
   {
       int j=rand.Rand();
       int k=rand.Rand();
-      solutions.insert(solutions.end(),solutions[j]);
+      //solutions.insert(solutions.end(),solutions[j]);
       solutions[j].Crossover(solutions[j],solutions[k]);
   }
 }

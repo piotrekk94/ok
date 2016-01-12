@@ -21,13 +21,13 @@ class Solution
 		void Mutate(int machine);
 		void MultiMutate(int machine,int MutationAmount);
 		Solution* Tournament(Solution *solution_table, int amount);//chyba lepiej bedzie to zrobic poza klasa
-
+		int BasicCheck();
 		Solution();
 		Solution(Task *task,std::vector<Answer> *answer,Maintance * maintance1,Maintance * maintance2,int task_size,int maintance1_size,int maintance2_size);
 		Solution(Task *task,Answer *answer,Maintance * maintance1,Maintance * maintance2,int task_size,int maintance1_size,int maintance2_size){};
 	protected:
 		int size;
-		std::shared_ptr<Random> linearRandom; 
+		std::shared_ptr<Random> linearRandom;
 		int rate=0;
 		std::vector<Answer> answer;
 		int created = 0;

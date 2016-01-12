@@ -4,17 +4,17 @@
 int Solution::BasicCheck()
 {
 	Answer check[size];
-	for(int i=0; ; i++) 
+	for(int i=0; i<size ; i++) 
 	{
 		check[answer[i].mach[0]].mach[0]=0;
 		check[answer[i].mach[1]].mach[1]=0;
 	}
-	for(int i=0; ; i++) 
+	for(int i=0; i<size ; i++) 
 	{
 		++(check[answer[i].mach[0]].mach[0]);
 		++(check[answer[i].mach[1]].mach[1]);
 	}
-	for(int i=0; ; i++) 
+	for(int i=0; i<size ; i++) 
 	{
 		if ((check[answer[i].mach[0]].mach[0]) != 1) 
 		{

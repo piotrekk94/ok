@@ -42,7 +42,10 @@ int Solution::Rate()
 		time[i].mach[0] = 0;
 		time[i].mach[1] = 0;
 	}
-	BasicCheck();
+	if (BasicCheck())
+		{
+		return -1;
+		}
 	if (DEBUG)
 	{
 		for(int i=0; i<size ; i++)

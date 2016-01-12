@@ -77,7 +77,7 @@ int Solution::Rate()
 				if (DEBUG) printf("Solution::Rate próba zliczenia czasu na machine[0] zakończona\n");
 			}
 			else mach_wait[0] = 1;
-			if (DEBUG) printf("Solution::Rate próba zliczenia czasu na machine[1] \n");
+			if (DEBUG) printf("Solution::Rate próba zliczenia czasu na machine[0] \n");
 			if (DEBUG == 2) printf("Solution::Rate j = %d\n",j);
 			if (answer[i].mach[1] == -1)
 			{
@@ -183,7 +183,7 @@ Solution::Solution() : linearRandom()
 	this->maintance[1]=nullptr;
 	this->gap_amount[0]=0;
 	this->gap_amount[1]=0;
-	linearRandom.Change(0,size);
+	linearRandom.Change(0,size-1);
 
 };
 Solution& Solution::operator=(Solution &from)
@@ -195,7 +195,7 @@ Solution& Solution::operator=(Solution &from)
 	this->gap_amount[0]=from.gap_amount[0];
 	this->gap_amount[1]=from.gap_amount[1];
 	this->answer=from.answer;
-	linearRandom.Change(0,size);
+	linearRandom.Change(0,size-1);
 	return *this;
 };
 Solution::Solution(Task *task,std::vector<Answer> *answer,Maintance * maintance1,Maintance * maintance2,int task_size,int maintance1_size,int maintance2_size) : linearRandom()
@@ -208,7 +208,7 @@ Solution::Solution(Task *task,std::vector<Answer> *answer,Maintance * maintance1
 	this->gap_amount[0]=maintance1_size;
 	this->gap_amount[1]=maintance2_size;
 	this->answer=*answer;
-	linearRandom.Change(0,size);
+	linearRandom.Change(0,size-1);
 }
 /*
 Solution::~Solution()
@@ -216,21 +216,26 @@ Solution::~Solution()
 	if (DEBUG) printf("elo from destructor\n");
 }
 */
-void Solution::Mutate(Solution &solution,int machine)
+void Solution::Mutate(int machine)
 {
+	if (DEBUG==2) printf("Solution::Mutate\n");
 	int a= linearRandom.Rand();
 	int b= linearRandom.Rand();
+	if (DEBUG)
+	{
+		if ((a>size) || (b>size)) printf("a lub b za duże a:%d b:%d size:%d\n",a,b,size);
+	}
 	int temp;
 	temp = answer[a].mach[machine];
 	answer[a].mach[machine] = answer[b].mach[machine];
 	answer[b].mach[machine] = temp;
-	solution.Rate();
+	Rate();
 }
-void Solution::MultiMutate(Solution &solution,int machine,int MutationAmount)
+void Solution::MultiMutate(int machine,int MutationAmount)
 {
 	for(int i=0; i<MutationAmount ; i++) 
 	{
-		Mutate(solution,machine);
+		Mutate(machine);
 	}
 }
 Solution* Solution::Tournament(Solution *solution_table, int amount)//chyba lepiej bedzie to zrobic poza klasa

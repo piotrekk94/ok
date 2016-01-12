@@ -17,8 +17,8 @@ class Solution
 		void PrintAnswers();
 		void Crossover(Solution &parent,Solution &crossovered);//wylicza wartość nowo stworzonej odpowiedzi
 		Solution& operator=(Solution &from);
-		void Mutate(Solution &solution,int machine);
-		void MultiMutate(Solution &solution,int machine,int MutationAmount);
+		void Mutate(int machine);
+		void MultiMutate(int machine,int MutationAmount);
 		Solution* Tournament(Solution *solution_table, int amount);//chyba lepiej bedzie to zrobic poza klasa
 
 		Solution();

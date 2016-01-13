@@ -89,6 +89,7 @@ int main(int argc,char** argv)
 		Solution solution;
 		std::vector<Answer> answer;
 		Instance instance = solution.Load_Instance("12.txt");
+		answer=GenerateAnswers(instance.task);
 		Solution solution2(&(instance.task.front()),&answer,&(instance.maintance.front()),&(instance.maintance.front()),instance.task.size(),instance.maintance.size(),instance.maintance.size());
 		solution2.Save_Instance("13.txt",13);
 	 */

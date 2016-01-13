@@ -1,13 +1,25 @@
 #include "Work.hpp"
 
-Work::Work()
+Work::Work(bool fromfile, int starting_population,int survival_amount,int mutation_percent,int crossover_percent,int tournament_groupsize)
 {
-  Load ld("dane.txt");
-  starting_population=ld.file_data.starting_population;
-  survival_amount=ld.file_data.survival_amount;
-  mutation_percent=ld.file_data.mutation_percent;
-  crossover_percent=ld.file_data.crossover_percent;
-  tournament_groupsize=4;
+  if (fromfile)
+  {
+    Load ld("dane.txt");
+    starting_population=ld.file_data.starting_population;
+    survival_amount=ld.file_data.survival_amount;
+    mutation_percent=ld.file_data.mutation_percent;
+    crossover_percent=ld.file_data.crossover_percent;
+    //tournament_groupsize=ld.file_data.tournament_groupsize;
+  }
+  else
+  {
+    this->starting_population=starting_population;
+    this->survival_amount=survival_amount;
+    this->mutation_percent=mutation_percent;
+    this->crossover_percent=crossover_percent;
+    this->tournament_groupsize=tournament_groupsize;
+  }
+
 }
 
 void Work::Start(int MaxLength,int MaintanceBreaks,int MaintanceBreaksAvgLength,int Tasks,int TasksAvgLength,int Duration)

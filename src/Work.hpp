@@ -9,7 +9,7 @@
 class Work
 {
 public:
-    Work();
+    Work(bool fromfile, int starting_population,int survival_amount,int mutation_percent,int crossover_percent,int tournament_groupsize);
     void Start(int MaxLength,int MaintanceBreaks,int MaintanceBreaksAvgLength,int Tasks,int TasksAvgLength,int Duration);
     std::vector<int> minhistory;
 private:

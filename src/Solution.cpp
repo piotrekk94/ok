@@ -75,7 +75,7 @@ int Solution::Rate()
 			}
 			if (DEBUG == 2) printf("Solution::Rate i = %d\n",i);
 			if (DEBUG) printf("Solution::Rate próba zliczenia czasu na machine[0] \n");
-			if (answer[i].mach[0] == -1)//czekanie do kolejnej przerwy
+		/*	if (i <) && (answer[i].mach[0] == -1)//czekanie do kolejnej przerwy
 			{
 				if (gap[0] < gap_amount[0])
 				{
@@ -89,8 +89,8 @@ int Solution::Rate()
 						gap[0]++;
 					}
 				}
-			}
-			else if ((i<size) && ((task[answer[i].mach[0]].machine == 0) || (time[answer[i].mach[0]].mach[1] > 0)))//mozliwy blad
+			}*/
+			if ((i<size) && ((task[answer[i].mach[0]].machine == 0) || (time[answer[i].mach[0]].mach[1] > 0)))//mozliwy blad
 				//nie mamy op2 lub odpowiadajace op1 wykonało się umożliwiając wykonanie op2
 				//czas zakonczenia op1 nie jest na razie wazny pozniej go sprawdzamy i w razie czego czekamy
 			{
@@ -115,7 +115,7 @@ int Solution::Rate()
 			else mach_wait[0] = 1;
 			if (DEBUG) printf("Solution::Rate próba zliczenia czasu na machine[0] \n");
 			if (DEBUG == 2) printf("Solution::Rate j = %d\n",j);
-			if (answer[i].mach[1] == -1)
+		/*	if (answer[i].mach[1] == -1)
 			{
 				if (gap[1] < gap_amount[1])
 				{
@@ -130,7 +130,8 @@ int Solution::Rate()
 					}
 				}
 			}
-			else if ((j < size) && ((task[answer[j].mach[1]].machine == 1) || (time[answer[j].mach[1]].mach[0] > 0)))//mozliwy blad
+			*/
+			if ((j < size) && ((task[answer[j].mach[1]].machine == 1) || (time[answer[j].mach[1]].mach[0] > 0)))//mozliwy blad
 				//
 				//nie mamy op2 lub op1 wykonało się
 			{
@@ -294,8 +295,26 @@ void Solution::Crossover(Solution &parent,Solution &crossovered)
 	//	Solution crossovered(task,nullptr,maintance[0],maintance[1],size,gap_amount[0],gap_amount[1]);
 	crossovered=parent;
 	int half = size/2;
-	int j=0;
+	//int j=0;
 	int k=0;
+	Answer tab[size];
+	for(int i=0; i < size ; i++) 
+	{
+		tab[i].mach[0]=0;
+		tab[i].mach[1]=0;
+	}
+	for(k=0; k < half ; k++) 
+	{
+		tab[crossovered.answer[k].mach[0]].mach[0]=1;
+		tab[crossovered.answer[k].mach[1]].mach[1]=1;
+	}
+	int j = k;
+	for(int i=0; i < size ; i++) 
+	{
+		if (tab[answer[i].mach[0]].mach[0] == 0) crossovered.answer[k++].mach[0]=answer[i].mach[0];
+		if (tab[answer[i].mach[1]].mach[1] == 0) crossovered.answer[j++].mach[1]=answer[i].mach[1];
+	}
+	/*
 	for (int i=0; i < size ; i++)
 	{
 		if (this->answer[i].mach[0] < half)
@@ -318,7 +337,7 @@ void Solution::Crossover(Solution &parent,Solution &crossovered)
 			crossovered.answer[k++].mach[1]=parent.answer[i].mach[1];
 		}
 	}
-
+	*/
 	crossovered.Rate();
 
 }

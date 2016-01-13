@@ -8,6 +8,7 @@
 class Solution
 {
 	public:
+		bool markfordelete=false;
 		Task *task = nullptr;
 		Maintance *maintance[2] = {nullptr,nullptr};
 		int gap_amount[2];

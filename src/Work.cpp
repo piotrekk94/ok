@@ -60,7 +60,11 @@ void Work::Tournament()
     for (int i=0;i<solutions.size();i++)
         tab[i]=false;
     int i=0,j;
-    while (i<solutions.size())
+    int temp=0;
+    for (int i=0;i<solutions.size();i++)
+      if (solutions[i].getRate()<solutions[temp].getRate())temp=i;
+    tab[i]=true;
+    while (i<solutions.size()-1)
     {
         j=rand.Rand();
         if (!tab[j])
@@ -80,10 +84,16 @@ void Work::Tournament()
         min = solutions[groups[i][j]].getRate() < solutions[groups[i][min]].getRate() ? j : min;
       for (int j=0;j<size;j++)
       {
-        if (solutions.size()==starting_population)break;
-        if (j!=min)solutions.erase(solutions.begin()+groups[i][j]);
+
+        if (j!=min)solutions[groups[i][j]].markfordelete=true;
       }
     }
+    for (int i=0;i<solutions.size();i++)
+    {
+      if (solutions.size()==starting_population)break;
+      if (solutions[i].markfordelete)solutions.erase(solutions.begin()+i--);
+    }
+
     delete tab;
 }
 

@@ -15,10 +15,15 @@ int main(int argc,char** argv)
 	int Tasks=50;
 	int TasksAvgLength=15;
 	int Duration=2;
+	FILE* plik;
+	plik=fopen("test.csv","w");
 	for(int i=0;i<10;i++)
 	{
 		Work job(starting_population,survival_amount,mutation_percent,mutation_amount,crossover_percent,tournament_groupsize);
 		job.Start(MaxLength,MaintanceBreaks,MaintanceBreaksAvgLength,Tasks,TasksAvgLength,Duration);
+		for (int j=0;j<job.minhistory.size();j++)
+			fprintf(plik,"%d,",job.minhistory[j]);
+		fprintf(plik, "\n");
 	}
 	return 0;
 }

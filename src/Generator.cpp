@@ -102,7 +102,7 @@ void Generator::GenerateMaintanceBreaks()
 		{
 			maint[0][i].start=start.Rand();
 			maint[0][i].length=length.Rand();
-  		if (i==0)ok=true;
+  		ok=true;
 			for (int j=0;j<i;j++)
 			{
 				if (maint[0][i].end()<maint[0][j].start||maint[0][i].start>maint[0][j].end())

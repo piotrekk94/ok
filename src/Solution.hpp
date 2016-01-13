@@ -26,6 +26,11 @@ class Solution
 		Solution();
 		Solution(Task *task,std::vector<Answer> *answer,Maintance * maintance1,Maintance * maintance2,int task_size,int maintance1_size,int maintance2_size);
 		Solution(Task *task,Answer *answer,Maintance * maintance1,Maintance * maintance2,int task_size,int maintance1_size,int maintance2_size){};
+		/////////////////////////////////////////////
+
+		Instance Load_Instance(const char * file_name);
+		void Save_Instance(const char * file_name,int instanceNumber);
+		/////////////////////////////////////////////
 	protected:
 		int size;
 		std::shared_ptr<Random> linearRandom;

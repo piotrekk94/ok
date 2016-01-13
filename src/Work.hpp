@@ -9,18 +9,20 @@
 class Work
 {
 public:
-    Work(bool fromfile, int starting_population,int survival_amount,int mutation_percent,int crossover_percent,int tournament_groupsize);
+    Work();
+    Work(int starting_population,int survival_amount,int mutation_percent,int mutation_amount,int crossover_percent,int tournament_groupsize);
     void Start(int MaxLength,int MaintanceBreaks,int MaintanceBreaksAvgLength,int Tasks,int TasksAvgLength,int Duration);
     std::vector<int> minhistory;
 private:
-    std::vector<Solution> solutions;
     void MainLoop(int Duration);
     void Tournament();
     void Mutations();
     void Crossingover();
+    std::vector<Solution> solutions;
     int starting_population;
     int survival_amount;
     int mutation_percent;
+    int mutation_amount;
     int crossover_percent;
     int tournament_groupsize;
 };

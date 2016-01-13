@@ -1,25 +1,24 @@
 #include "Work.hpp"
 
-Work::Work(bool fromfile, int starting_population,int survival_amount,int mutation_percent,int crossover_percent,int tournament_groupsize)
+Work::Work()
 {
-  if (fromfile)
-  {
-    Load ld("dane.txt");
-    starting_population=ld.file_data.starting_population;
-    survival_amount=ld.file_data.survival_amount;
-    mutation_percent=ld.file_data.mutation_percent;
-    crossover_percent=ld.file_data.crossover_percent;
-    //tournament_groupsize=ld.file_data.tournament_groupsize;
-  }
-  else
-  {
-    this->starting_population=starting_population;
-    this->survival_amount=survival_amount;
-    this->mutation_percent=mutation_percent;
-    this->crossover_percent=crossover_percent;
-    this->tournament_groupsize=tournament_groupsize;
-  }
+  Load ld("dane.txt");
+  starting_population=ld.file_data.starting_population;
+  survival_amount=ld.file_data.survival_amount;
+  mutation_percent=ld.file_data.mutation_percent;
+  //mutation_amount=ld.file_data.mutation_amount;
+  crossover_percent=ld.file_data.crossover_percent;
+  //tournament_groupsize=ld.file_data.tournament_groupsize;
+}
 
+Work::Work(int starting_population,int survival_amount,int mutation_percent,int mutation_amount,int crossover_percent,int tournament_groupsize)
+{
+  this->starting_population=starting_population;
+  this->survival_amount=survival_amount;
+  this->mutation_percent=mutation_percent;
+  this->mutation_amount=mutation_amount;
+  this->crossover_percent=crossover_percent;
+  this->tournament_groupsize=tournament_groupsize;
 }
 
 void Work::Start(int MaxLength,int MaintanceBreaks,int MaintanceBreaksAvgLength,int Tasks,int TasksAvgLength,int Duration)
@@ -36,29 +35,20 @@ void Work::MainLoop(int Duration)
     for (int i=0;i<solutions.size();i++)
     {
       minhistory[0] = solutions[i].getRate() < minhistory[0] ? solutions[i].getRate() : minhistory[0];
-      //solutions[i].PrintAnswers();
-      //printf("%d\n\n",solutions[i].getRate());
     }
-    //scanf("%d\n",&end );
     time(&start);
     time(&end);
     while(end-start<Duration)
     {
-        //printf("Populacja %d\n",solutions.size());
         Mutations();
-        //printf("Mutacje\n" );
         Crossingover();
-        //printf("Krzyzowanie\n" );
         Tournament();
-        //printf("Turniej\n");
         time(&end);
-        //printf("Minelo %d\n", end-start);
         int min=0;
         for (int i=0;i<solutions.size();i++)
           min = solutions[i].getRate() < solutions[min].getRate() ? i : min;
         minhistory.push_back(solutions[min].getRate());
     }
-
     printf("%d,%d\n",minhistory[0],minhistory[minhistory.size()-1] );
 }
 void Work::Tournament()
@@ -105,8 +95,7 @@ void Work::Mutations()
   {
       int j=rand.Rand();
       solutions.insert(solutions.end(),solutions[j]);
-      //solutions[j].Mutate(rand.Rand()%2);
-      solutions[j].MultiMutate(rand.Rand()%2,5);
+      solutions[j].MultiMutate(rand.Rand()%2,mutation_amount);
   }
 }
 

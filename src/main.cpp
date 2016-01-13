@@ -3,7 +3,10 @@
 using namespace std;
 int main(int argc,char** argv)
 {
-	Work job;
-	job.Start(15,2,3,5,5,15);
+	for(int i=0;i<10;i++)
+	{
+		Work job;
+		job.Start(150,2,20,50,10,5);
+	}
 	return 0;
 }

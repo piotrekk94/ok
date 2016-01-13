@@ -1,22 +1,23 @@
 #include"Solution.hpp"
+#define DEBUG 0
 //Solution::Solution(int size)
 //
 int Solution::BasicCheck()
 {
 	Answer check[size];
-	for(int i=0; i<size ; i++) 
+	for(int i=0; i<size ; i++)
 	{
-		check[answer[i].mach[0]].mach[0]=0;
-		check[answer[i].mach[1]].mach[1]=0;
+		check[i].mach[0]=0;
+		check[i].mach[1]=0;
 	}
-	for(int i=0; i<size ; i++) 
+	for(int i=0; i<size ; i++)
 	{
 		++(check[answer[i].mach[0]].mach[0]);
 		++(check[answer[i].mach[1]].mach[1]);
 	}
-	for(int i=0; i<size ; i++) 
+	for(int i=0; i<size ; i++)
 	{
-		if ((check[answer[i].mach[0]].mach[0]) != 1) 
+		if ((check[answer[i].mach[0]].mach[0]) != 1)
 		{
 			if (DEBUG) printf("Solution::BasicCheck error\n");
 			return 1;
@@ -43,9 +44,12 @@ int Solution::Rate()
 		time[i].mach[1] = 0;
 	}
 	if (BasicCheck())
-		{
+	{
+		int d;
+		printf("stop\n");
+		scanf("%d\n",d );
 		return -1;
-		}
+	}
 	if (DEBUG)
 	{
 		for(int i=0; i<size ; i++)
@@ -243,6 +247,7 @@ Solution::Solution(Task *task,std::vector<Answer> *answer,Maintance * maintance1
 	this->gap_amount[1]=maintance2_size;
 	this->answer=*answer;
 	(*linearRandom).Change(0,size-1);
+	Rate();
 }
 /*
    Solution::~Solution()

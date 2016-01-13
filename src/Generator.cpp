@@ -137,6 +137,6 @@ void Generator::GenerateMaintanceBreaks()
 	}
 	for (int i=0;i<MaintanceBreaks;i++)
 	{
-		printf("%d %d %d %d\n",maint[0][i].start,maint[0][i].end(),maint[1][i].start,maint[1][i].end() );
+		//printf("%d %d %d %d\n",maint[0][i].start,maint[0][i].end(),maint[1][i].start,maint[1][i].end() );
 	}
 }

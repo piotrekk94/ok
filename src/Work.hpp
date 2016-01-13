@@ -11,6 +11,7 @@ class Work
 public:
     Work();
     void Start(int MaxLength,int MaintanceBreaks,int MaintanceBreaksAvgLength,int Tasks,int TasksAvgLength,int Duration);
+    std::vector<int> minhistory;
 private:
     std::vector<Solution> solutions;
     void MainLoop(int Duration);

@@ -2,7 +2,7 @@
 #include <cstdio>
 //#include <string>
 #include <cstring>
-#define DEBUG 1
+#define DEBUG 0
 using namespace std;
 struct File_data
 {

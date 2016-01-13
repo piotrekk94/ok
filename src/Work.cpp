@@ -7,7 +7,7 @@ Work::Work()
   survival_amount=ld.file_data.survival_amount;
   mutation_percent=ld.file_data.mutation_percent;
   crossover_percent=ld.file_data.crossover_percent;
-  tournament_groupsize=3;
+  tournament_groupsize=4;
 }
 
 void Work::Start(int MaxLength,int MaintanceBreaks,int MaintanceBreaksAvgLength,int Tasks,int TasksAvgLength,int Duration)
@@ -20,20 +20,34 @@ void Work::Start(int MaxLength,int MaintanceBreaks,int MaintanceBreaksAvgLength,
 void Work::MainLoop(int Duration)
 {
     time_t start,end;
+    minhistory.push_back(100000000);
+    for (int i=0;i<solutions.size();i++)
+    {
+      minhistory[0] = solutions[i].getRate() < minhistory[0] ? solutions[i].getRate() : minhistory[0];
+      //solutions[i].PrintAnswers();
+      //printf("%d\n\n",solutions[i].getRate());
+    }
+    //scanf("%d\n",&end );
     time(&start);
     time(&end);
     while(end-start<Duration)
     {
-        printf("Populacja %d\n",solutions.size());
+        //printf("Populacja %d\n",solutions.size());
         Mutations();
-        printf("Mutacje\n" );
+        //printf("Mutacje\n" );
         Crossingover();
-        printf("Krzyzowanie\n" );
+        //printf("Krzyzowanie\n" );
         Tournament();
-        printf("Turniej\n");
+        //printf("Turniej\n");
         time(&end);
-        printf("Minelo %d\n", end-start);
+        //printf("Minelo %d\n", end-start);
+        int min=0;
+        for (int i=0;i<solutions.size();i++)
+          min = solutions[i].getRate() < solutions[min].getRate() ? i : min;
+        minhistory.push_back(solutions[min].getRate());
     }
+
+    printf("%d,%d\n",minhistory[0],minhistory[minhistory.size()-1] );
 }
 void Work::Tournament()
 {
@@ -58,12 +72,15 @@ void Work::Tournament()
     }
     for (int i=0;i<groups.size();i++)
     {
-      int max=0;
+      int min=0;
       int size=groups[i].size();
       for (int j=0;j<size;j++)
-        max = solutions[groups[i][j]].getRate() > solutions[groups[i][max]].getRate() ? j : max;
+        min = solutions[groups[i][j]].getRate() < solutions[groups[i][min]].getRate() ? j : min;
       for (int j=0;j<size;j++)
-        if (j!=max)solutions.erase(solutions.begin()+groups[i][j]);
+      {
+        if (solutions.size()==starting_population)break;
+        if (j!=min)solutions.erase(solutions.begin()+groups[i][j]);
+      }
     }
     delete tab;
 }
@@ -76,7 +93,8 @@ void Work::Mutations()
   {
       int j=rand.Rand();
       solutions.insert(solutions.end(),solutions[j]);
-      solutions[j].Mutate(rand.Rand()%2);
+      //solutions[j].Mutate(rand.Rand()%2);
+      solutions[j].MultiMutate(rand.Rand()%2,5);
   }
 }
 
@@ -89,6 +107,6 @@ void Work::Crossingover()
       int j=rand.Rand();
       int k=rand.Rand();
       solutions.insert(solutions.end(),solutions[j]);
-      solutions[j].Crossover(solutions[j],solutions[k]);
+      solutions[j].Crossover(solutions[k],solutions[solutions.size()-1]);
   }
 }

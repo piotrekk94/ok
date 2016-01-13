@@ -1,4 +1,5 @@
 #pragma once
+#include <vector>
 #define DEBUG 0
 struct Task
 {
@@ -17,4 +18,10 @@ struct Maintance
 	{
 	return start+length;
 	}
+};
+struct Instance
+{
+	int number;
+	std::vector<Task> task;
+	std::vector<Maintance> maintance;
 };

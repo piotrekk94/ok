@@ -350,3 +350,51 @@ void Solution::PrintAnswers()
 	for(int i=0; i<size ; i++)
 		printf("%d\t%d\n",answer[i].mach[0],answer[i].mach[1]);
 }
+//////////////////////////////////
+Instance Solution::Load_Instance(const char * file_name)
+{
+	Instance instance;
+	FILE *file = fopen(file_name,"r");
+	if (file == NULL) perror("error plik nie zostal wczytany");
+	else
+	{
+		int taskSize;
+		fscanf(file,"**** %d ****\n",&instance.number);
+		fscanf(file,"%d\n",&taskSize);
+		instance.task.resize(taskSize);
+		Maintance temp;
+		int limbo;
+		for(int i=0; i < taskSize ; i++) 
+		{
+			fscanf(file,"%d;%d;%d;%d;",&instance.task[i].op[0],&instance.task[i].op[1],&instance.task[i].machine,&limbo);
+		}
+		int number=-1;
+		char tab[50];
+		int check=-1;
+		while (number == check)
+		{
+			check++;
+			fscanf(file,"%d;%d;%d\n",&number,&temp.start,&temp.length);
+			instance.maintance.push_back(temp);
+		}
+	}
+
+	return instance;
+}
+void Solution::Save_Instance(const char * file_name,int instanceNumber)
+{
+	FILE *file = fopen(file_name,"w");
+	if (file == NULL) perror("error plik nie zostal wczytany");
+	else
+	{
+		fprintf(file,"**** %d ****\n",instanceNumber);
+		fprintf(file,"%d\n",size);
+		for(int i=0; i < size ; i++) 
+		{
+			fprintf(file,"%d;%d;%d;%d;\n",task[i].op[0],task[i].op[1],task[i].machine, task[i].machine?0:1);
+		}
+		for(int i=0; i <gap_amount[1]  ; i++) 
+			fprintf(file,"%d;%d;%d\n",i,maintance[0][i].start,maintance[0][i].length);
+		fprintf(file,"*** EOF ***");
+	}
+}

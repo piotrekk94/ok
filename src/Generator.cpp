@@ -10,14 +10,20 @@ Generator::Generator(int MaxLength,int MaintanceBreaks,int MaintanceBreaksAvgLen
 	this->task=new Task[Tasks];
 	this->maint[0]=new Maintance[MaintanceBreaks];
 	this->maint[1]=new Maintance[MaintanceBreaks];
-        this->Population=Population;
+  this->Population=Population;
 	srand(time(NULL));
-        GenerateInstance();
+  GenerateInstance();
 }
-Generator::~Generator()
-{
 
+void Generator::ReplaceBreaks(Instance i)
+{
+	this->maint[1]=&(i.maintance.front());
 }
+void Generator::ReplaceTasks(Instance i)
+{
+	this->task=&(i.task.front());
+}
+
 void Generator::GenerateInstance()
 {
 	GenerateMaintanceBreaks();
@@ -41,9 +47,10 @@ std::vector<Answer> Generator::GenerateAnswers()
         Answer temp={.mach={0,0}};
         std::vector<Answer> answer;
         answer.insert(answer.begin(),Tasks,temp);
+				Random Rand(0,Tasks-1);
         while(i<Tasks||(j<Tasks))
         {
-            k=rand()%Tasks;
+            k=Rand.Rand();
             if(task[k].machine==0)
             {
                 if (tab[k]==0)
@@ -84,9 +91,8 @@ std::vector<Solution> Generator::GenerateSolution()
         std::vector<Solution> result;
         for (int i=0;i<Population;i++)
         {
-            std::vector<Answer> *temp=new std::vector<Answer>;
-            *temp=GenerateAnswers();
-            Solution sol(task,temp,maint[0],maint[1],Tasks,MaintanceBreaks,MaintanceBreaks);
+            std::vector<Answer> temp=GenerateAnswers();
+            Solution sol(task,&temp,maint[0],maint[1],Tasks,MaintanceBreaks,MaintanceBreaks);
             result.push_back(sol);
         }
 	return result;
@@ -96,7 +102,7 @@ void Generator::GenerateMaintanceBreaks()
 {
 	Random length(MaintanceBreaksAvgLength*(1-MAX_DEVIATION_FROM_AVG),MaintanceBreaksAvgLength*(1+MAX_DEVIATION_FROM_AVG));
 	Random start(0,MaxLength);
-	for (int i=0;i<MaintanceBreaks;i++)
+	/*for (int i=0;i<MaintanceBreaks;i++)
 	{
 		bool ok=false;
 		while(!ok)
@@ -115,7 +121,7 @@ void Generator::GenerateMaintanceBreaks()
 				}
 			}
 		}
-	}
+	}*/
 	for (int i=0;i<MaintanceBreaks;i++)
 	{
 		bool ok=false;
@@ -136,10 +142,13 @@ void Generator::GenerateMaintanceBreaks()
 			}
 		}
 	}
-	for (int i=0;i<MaintanceBreaks;i++)
-	{
-		//printf("%d %d %d %d\n",maint[0][i].start,maint[0][i].end(),maint[1][i].start,maint[1][i].end() );
-	}
+	std::sort(maint[1],maint[1]+MaintanceBreaks-1,CompareBreaks);
+}
+
+bool CompareBreaks(Maintance const& v1,Maintance const& v2)
+{
+	if (v1.start<v2.start)return true;
+	else return false;
 }
 
 std::vector<Answer> GenerateAnswers(std::vector<Task> t)

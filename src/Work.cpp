@@ -11,7 +11,7 @@ Work::Work()
   //tournament_groupsize=ld.file_data.tournament_groupsize;
 }
 
-Work::Work(int starting_population,int survival_amount,int mutation_percent,int mutation_amount,int crossover_percent,int tournament_groupsize)
+Work::Work(int starting_population,int survival_amount,int mutation_percent,int mutation_amount,int crossover_percent,int tournament_groupsize,int change_check_distance)
 {
   this->starting_population=starting_population;
   this->survival_amount=survival_amount;
@@ -19,11 +19,12 @@ Work::Work(int starting_population,int survival_amount,int mutation_percent,int 
   this->mutation_amount=mutation_amount;
   this->crossover_percent=crossover_percent;
   this->tournament_groupsize=tournament_groupsize;
+  this->change_check_distance=change_check_distance;
 }
 
-void Work::Start(std::vector<Solution> solutions,int Duration)
+void Work::Start(std::vector<Solution> s,int Duration)
 {
-  this->solutions=solutions;
+  solutions=s;
   MainLoop(Duration);
 }
 
@@ -41,24 +42,23 @@ void Work::Generate(int MaxLength,int MaintanceBreaks,int MaintanceBreaksAvgLeng
 
 void Work::MainLoop(int Duration)
 {
-    time_t start,end;
-    minhistory.push_back(100000000);
+    minhistory.push_back(solutions[0].getRate());
     for (int i=0;i<solutions.size();i++)
     {
       minhistory[0] = solutions[i].getRate() < minhistory[0] ? solutions[i].getRate() : minhistory[0];
     }
-    time(&start);
-    time(&end);
-    while(end-start<Duration)
+    std::clock_t c_end,c_start = std::clock();
+    while(1000 * (c_end-c_start) / CLOCKS_PER_SEC<Duration)
     {
         Mutations();
         Crossingover();
         Tournament();
-        time(&end);
         int min=0;
         for (int i=0;i<solutions.size();i++)
           min = solutions[i].getRate() < solutions[min].getRate() ? i : min;
         minhistory.push_back(solutions[min].getRate());
+        c_end = std::clock();
+        if (NoChanges())break;
     }
     printf("%d,%d\n",minhistory[0],minhistory[minhistory.size()-1] );
 }
@@ -103,6 +103,8 @@ void Work::Tournament()
       if (solutions.size()==starting_population)break;
       if (solutions[i].markfordelete)solutions.erase(solutions.begin()+i--);
     }
+    for (int i=0;i<solutions.size();i++)
+      solutions[i].markfordelete=false;
     delete tab;
 }
 
@@ -116,6 +118,16 @@ void Work::Mutations()
       solutions.insert(solutions.end(),solutions[j]);
       solutions[j].MultiMutate(rand.Rand()%2,mutation_amount);
   }
+  rand.Change(0,solutions.size()-1);
+  /*if (NoChanges())
+  {
+    for (int j=0;j<5;j++)
+    {
+      int i=rand.Rand();
+      solutions.insert(solutions.end(),solutions[i]);
+      solutions[i].Swap();
+    }
+  }*/
 }
 
 void Work::Crossingover()
@@ -129,4 +141,11 @@ void Work::Crossingover()
       solutions.insert(solutions.end(),solutions[j]);
       solutions[j].Crossover(solutions[k],solutions[solutions.size()-1]);
   }
+}
+
+bool Work::NoChanges()
+{
+  if (minhistory.size()>=change_check_distance)
+    if (minhistory[minhistory.size()-1]==minhistory[minhistory.size()-change_check_distance-1]) return true;
+  return false;
 }

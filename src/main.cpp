@@ -8,26 +8,25 @@ int main(int argc,char** argv)
 	FILE* plik;
 	plik=fopen("test.csv","w");
 	int MaxLength=500;
-	int MaintanceBreaks=50;
-	int MaintanceBreaksAvgLength=5;
+	int MaintanceBreaks=10;
+	int MaintanceBreaksAvgLength=15;
 	int Tasks=100;
 	int TasksAvgLength=5;
-	int Duration=1;
+	int Duration=1000;
 	int starting_population=100;
 	int survival_amount=20;
+	Instance inst;
 
-	Generator gen(MaxLength,MaintanceBreaks,MaintanceBreaksAvgLength,Tasks,TasksAvgLength,starting_population);
-	std::vector<Solution> solutions=gen.GenerateSolution();
-	for (int i=0;i<starting_population;i++)
-	{
-		std::stringstream si,so;
-		si<<"i"<<i<<".txt";
-		so<<"o"<<i<<".txt";
-		solutions[i].Save_Instance((si.str()).c_str(),i);
-		solutions[i].InitSave((so.str()).c_str());
-		solutions[i].Rate();
-	}
-	/*while (j<5)
+	//Generator gen(MaxLength,MaintanceBreaks,MaintanceBreaksAvgLength,Tasks,TasksAvgLength,starting_population);
+	//std::vector<Solution> solutions=gen.GenerateSolution();
+		//std::stringstream si,so;
+		//si<<"./input/i"<<i<<".txt";
+		//so<<"./output/o"<<i<<".txt";
+		//solutions[0].Save_Instance("inst.txt",1);
+		//solutions[i].InitSave((so.str()).c_str());
+		//solutions[i].Rate();
+		//inst solutions[0].Load_Instance("inst.txt");
+	while (j<2)
 	{
 		printf("%d %d\n",j,k );
 		//solutions.clear();
@@ -40,10 +39,10 @@ int main(int argc,char** argv)
 			Solution solution2(&(instance.task.front()),&answer,&(instance.maintance.front()),&(instance.maintance.front()),instance.task.size(),instance.maintance.size(),instance.maintance.size());
 			solutions.push_back(solution2);
 		}*/
-		/*int mutation_percent=30;
+		int mutation_percent=30;
 		int crossover_percent=70;
 		int mutation_amount=5;
-		int tournament_groupsize=4;
+		int tournament_groupsize=3;
 		switch (j) {
 			case 0:
 				mutation_percent=k*10;
@@ -75,27 +74,22 @@ int main(int argc,char** argv)
 					k=1;
 				}
 				break;
-			case 3:
-				tournament_groupsize=k;
-				k++;
-				fprintf(plik, "tournament_groupsize %d,",tournament_groupsize );
-				if (k==10)
-				{
-					j++;
-					k=1;
-				}
-				break;
 		}
 		int sum=0;
+		int sum2=0;
 		int powt=20;
 		for(int i=0;i<powt;i++)
 		{
-			Work job(starting_population,survival_amount,mutation_percent,mutation_amount,crossover_percent,tournament_groupsize);
+			Generator gen(MaxLength,MaintanceBreaks,MaintanceBreaksAvgLength,Tasks,TasksAvgLength,starting_population);
+			std::vector<Solution> solutions=gen.GenerateSolution();
+			Work job(starting_population,survival_amount,mutation_percent,mutation_amount,crossover_percent,tournament_groupsize,20);
 			job.Start(solutions,Duration);
 			sum+=job.minhistory[0]-job.minhistory[job.minhistory.size()-1];
+			sum2+=job.minhistory[0];
 		}
-		fprintf(plik,"%d\n",sum/powt);
-	}*/
+		fprintf(plik,"%d\n",100*sum/sum2);
+	}
+	fclose(plik);
 		/*
 		   Solution solution;
 		   std::vector<Answer> answer;

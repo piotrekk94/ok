@@ -10,7 +10,7 @@
 class Solution
 {
 	public:
-		bool markfordelete=false;
+	 	bool markfordelete=false;
 		Task *task = nullptr;
 		Maintance *maintance[2] = {nullptr,nullptr};
 		int gap_amount[2];
@@ -18,6 +18,7 @@ class Solution
 		void InitSave(std::string file_name);
 
 		int Rate();//zapisuje wartość w rate
+		void Swap();
 		void PrintAnswers();
 		std::string Print(std::string type,int count,int op, int start,int length, int real_length,int machine);
 		void SaveAnswer(std::string M1,std::string M2,Answer idle,int idlec0,int idlec1,int gap0,int gap1);

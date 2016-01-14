@@ -3,6 +3,8 @@
 #include <cstring>
 #include <vector>
 #include <memory>
+#include <sstream>
+#include <string>
 #include "Struct.hpp"
 #include "Random.hpp"
 class Solution
@@ -12,11 +14,13 @@ class Solution
 		Task *task = nullptr;
 		Maintance *maintance[2] = {nullptr,nullptr};
 		int gap_amount[2];
-
 		int getRate();//odwołuje się do zapisane wartości
+		void InitSave(std::string file_name);
 
 		int Rate();//zapisuje wartość w rate
 		void PrintAnswers();
+		std::string Print(std::string type,int count,int op, int start,int length, int real_length,int machine);
+		void SaveAnswer(std::string M1,std::string M2,Answer idle,int idlec0,int idlec1,int gap0,int gap1);
 		void Crossover(Solution &parent,Solution &crossovered);//wylicza wartość nowo stworzonej odpowiedzi
 	//	Solution& operator=(Solution &from);
 		void Mutate(int machine);
@@ -32,6 +36,8 @@ class Solution
 		void Save_Instance(const char * file_name,int instanceNumber);
 		/////////////////////////////////////////////
 	protected:
+		bool save=false;
+		std::string file_name;
 		int size;
 		std::shared_ptr<Random> linearRandom;
 		int rate=0;

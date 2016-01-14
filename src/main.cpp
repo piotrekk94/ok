@@ -1,4 +1,5 @@
 #include <vector>
+#include <string>
 #include "Work.hpp"
 using namespace std;
 int main(int argc,char** argv)
@@ -12,17 +13,24 @@ int main(int argc,char** argv)
 	int Tasks=100;
 	int TasksAvgLength=5;
 	int Duration=1;
-
-	int survival_amount=20;
 	int starting_population=100;
+	int survival_amount=20;
+
 	Generator gen(MaxLength,MaintanceBreaks,MaintanceBreaksAvgLength,Tasks,TasksAvgLength,starting_population);
 	std::vector<Solution> solutions=gen.GenerateSolution();
-	for (int i=0;i<1;i++)
-		solutions[i].Save_Instance("plik.txt",i);
-	while (j<5)
+	for (int i=0;i<starting_population;i++)
+	{
+		std::stringstream si,so;
+		si<<"i"<<i<<".txt";
+		so<<"o"<<i<<".txt";
+		solutions[i].Save_Instance((si.str()).c_str(),i);
+		solutions[i].InitSave((so.str()).c_str());
+		solutions[i].Rate();
+	}
+	/*while (j<5)
 	{
 		printf("%d %d\n",j,k );
-		solutions.clear();
+		//solutions.clear();
 		/*for (int i=0;i<starting_population;i++)
 		{
 			Solution solution;
@@ -32,7 +40,7 @@ int main(int argc,char** argv)
 			Solution solution2(&(instance.task.front()),&answer,&(instance.maintance.front()),&(instance.maintance.front()),instance.task.size(),instance.maintance.size(),instance.maintance.size());
 			solutions.push_back(solution2);
 		}*/
-		int mutation_percent=30;
+		/*int mutation_percent=30;
 		int crossover_percent=70;
 		int mutation_amount=5;
 		int tournament_groupsize=4;
@@ -87,14 +95,14 @@ int main(int argc,char** argv)
 			sum+=job.minhistory[0]-job.minhistory[job.minhistory.size()-1];
 		}
 		fprintf(plik,"%d\n",sum/powt);
-	}
-	/*
-		Solution solution;
-		std::vector<Answer> answer;
-		Instance instance = solution.Load_Instance("12.txt");
-		answer=GenerateAnswers(instance.task);
-		Solution solution2(&(instance.task.front()),&answer,&(instance.maintance.front()),&(instance.maintance.front()),instance.task.size(),instance.maintance.size(),instance.maintance.size());
-		solution2.Save_Instance("13.txt",13);
-	 */
-	return 0;
+	}*/
+		/*
+		   Solution solution;
+		   std::vector<Answer> answer;
+		   Instance instance = solution.Load_Instance("12.txt");
+		   answer=GenerateAnswers(instance.task);
+		   Solution solution2(&(instance.task.front()),&answer,&(instance.maintance.front()),&(instance.maintance.front()),instance.task.size(),instance.maintance.size(),instance.maintance.size());
+		   solution2.Save_Instance("13.txt",13);
+		 */
+		return 0;
 }

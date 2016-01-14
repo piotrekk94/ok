@@ -46,13 +46,13 @@ std::string Solution::Print(std::string type,int count,int op, int start,int len
 		if (type == "idle")
 		{
 			std::stringstream stream;
-			stream << "idle" <<count<<"_M"<< machine+1<<","<<start<<","<<length<<","<<";";
+			stream << "idle" <<count<<"_M"<< machine+1<<","<<start<<","<<length<<";";
 			return stream.str();
 		}
 		if (type == "maint")
 		{
 			std::stringstream stream;
-			stream << "maint" <<count<<"_M"<< machine+1<<","<<start<<","<<length<<","<<";";
+			stream << "maint" <<count<<"_M"<< machine+1<<","<<start<<","<<length<<";";
 			return stream.str();
 		}
 	}
@@ -64,7 +64,7 @@ void Solution::SaveAnswer(std::string M1,std::string M2,Answer idle,int idlec0,i
 	for(int i=0;i < gap1 ; i++) 
 		maint0+=maintance[1][i].length;
 	FILE * file = fopen(file_name.c_str(),"w");
-	fprintf(file,"M1: %s\nM2: %s\n%d;%d\n%d;%d\n%d;%d\n%d;%d\n",M1,M2,gap0,maint0,gap1,maint1,idlec0,idle.mach[0],idlec1,idle.mach[1]);
+	fprintf(file,"M1: %s\nM2: %s\n%d;%d\n%d;%d\n%d;%d\n%d;%d\n",M1.c_str(),M2.c_str(),gap0,maint0,gap1,maint1,idlec0,idle.mach[0],idlec1,idle.mach[1]);
 
 	fclose(file);
 }
@@ -75,7 +75,7 @@ int Solution::Rate()
 	int mach_wait[2]={0,0};
 	int gap[2]={0,0};
 	int op1;
-	Answer idle_time;
+	Answer idle_time={0};
 	int realtime,start;
 	std::string M1,M2;
 	int idle,M1IdleCounter=0,M2IdleCounter=0;
@@ -147,7 +147,7 @@ int Solution::Rate()
 					machine[0]+=(task[answer[i].mach[0]].op[task[answer[i].mach[0]].machine]+3)*3/10;//kara za przerwanie zadania
 					realtime += (task[answer[i].mach[0]].op[task[answer[i].mach[0]].machine]+3)*3/10;
 					}
-				M1 += Print("op",i,task[answer[i].mach[0]].machine,start,task[answer[i].mach[0]].op[task[answer[i].mach[0]].machine],realtime,0);
+				M1 += Print("op",answer[i].mach[0],task[answer[i].mach[0]].machine,start,task[answer[i].mach[0]].op[task[answer[i].mach[0]].machine],realtime,0);
 				while ((gap[0] < gap_amount[0]) && ((maintance[0][gap[0]].start) < machine[0]))
 				{
 					M1 += Print("maint",gap[0],1,maintance[0][gap[0]].start,maintance[0][gap[0]].length,maintance[0][gap[0]].length,0);
@@ -172,7 +172,7 @@ int Solution::Rate()
 			{
 				if (machine[1] < time[answer[j].mach[1]].mach[0])//co nastapilo pozniej zakonczenie operacji poprzedniej czy powiazanej
 				{//w tym czasie nic nie robilismy
-					int idle = (time[answer[i].mach[1]].mach[0] < maintance[1][gap[1]].start ? time[answer[j].mach[1]].mach[0] : maintance[1][gap[1]].start) - machine[1];
+					int idle = (time[answer[j].mach[1]].mach[0] < maintance[1][gap[1]].start ? time[answer[j].mach[1]].mach[0] : maintance[1][gap[1]].start) - machine[1];
 					M2 += Print("idle",M2IdleCounter++,1,machine[1],idle,idle,1);
 					machine[1] = time[answer[j].mach[1]].mach[0];
 					idle_time.mach[1]+=idle;
@@ -198,7 +198,7 @@ int Solution::Rate()
 					machine[1]+=(task[answer[j].mach[2]].op[1-task[answer[j].mach[1]].machine]+3)*3/10;
 					realtime+=(task[answer[j].mach[2]].op[1-task[answer[j].mach[1]].machine]+3)*3/10;
 					}
-				M2 += Print("op",j,task[answer[j].mach[1]].machine,start,task[answer[j].mach[1]].op[task[answer[i].mach[1]].machine],realtime,1);
+				M2 += Print("op",answer[j].mach[1],task[answer[j].mach[1]].machine,start,task[answer[j].mach[1]].op[task[answer[j].mach[1]].machine],realtime,1);
 				while ((gap[1] < gap_amount[1]) && ((maintance[1][gap[1]].start) < machine[1]))
 				{
 					M2 += Print("maint",gap[1],1,maintance[1][gap[1]].start,maintance[1][gap[1]].length,maintance[1][gap[1]].length,1);
@@ -247,7 +247,7 @@ int Solution::Rate()
 			printf("%d\t%d\n",answer[i].mach[0],answer[i].mach[1]);
 		}
 	}
-	SaveAnswer(M1,M2,idle_time,M1IdleCounter,M2IdleCounter,gap[0],gap[1]);
+	if (save) SaveAnswer(M1,M2,idle_time,M1IdleCounter,M2IdleCounter,gap[0],gap[1]);
 	if ((mach_wait[0] & mach_wait[1]) == 1) return -1;
 	//for(int i=0; i<size ; i++) if (time[i].mach[0] > (time[i].mach[1] - task[i].op[1])) return i*-1;
 	if (machine[0] > machine[1])
@@ -413,6 +413,7 @@ Instance Solution::Load_Instance(const char * file_name)
 		for(int i=0; i < taskSize ; i++) 
 		{
 			fscanf(file,"%d;%d;%d;%d;",&instance.task[i].op[0],&instance.task[i].op[1],&instance.task[i].machine,&limbo);
+			instance.task[i].machine--;
 		}
 		int number=-1;
 		int check=-1;
@@ -436,7 +437,7 @@ void Solution::Save_Instance(const char * file_name,int instanceNumber)
 		fprintf(file,"%d\n",size);
 		for(int i=0; i < size ; i++) 
 		{
-			fprintf(file,"%d;%d;%d;%d;\n",task[i].op[0],task[i].op[1],task[i].machine, task[i].machine?0:1);
+			fprintf(file,"%d;%d;%d;%d;\n",task[i].op[0],task[i].op[1],task[i].machine+1, (task[i].machine?0:1) +1);
 		}
 		for(int i=0; i <gap_amount[1]  ; i++) 
 			fprintf(file,"%d;%d;%d\n",i,maintance[0][i].start,maintance[0][i].length);

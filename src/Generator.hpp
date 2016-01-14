@@ -23,3 +23,5 @@ class Generator
 		std::vector<Answer> GenerateAnswers();
                 void GenerateInstance();
 };
+
+std::vector<Answer> GenerateAnswers(std::vector<Task> t);

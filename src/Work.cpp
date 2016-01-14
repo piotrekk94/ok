@@ -21,11 +21,22 @@ Work::Work(int starting_population,int survival_amount,int mutation_percent,int 
   this->tournament_groupsize=tournament_groupsize;
 }
 
+void Work::Start(std::vector<Solution> solutions,int Duration)
+{
+  this->solutions=solutions;
+  MainLoop(Duration);
+}
+
 void Work::Start(int MaxLength,int MaintanceBreaks,int MaintanceBreaksAvgLength,int Tasks,int TasksAvgLength,int Duration)
 {
-        Generator gen(MaxLength,MaintanceBreaks,MaintanceBreaksAvgLength,Tasks,TasksAvgLength,starting_population);
-        solutions=gen.GenerateSolution();
-        MainLoop(Duration);
+    Generate(MaxLength,MaintanceBreaks,MaintanceBreaksAvgLength,Tasks,TasksAvgLength,Duration);
+    MainLoop(Duration);
+}
+
+void Work::Generate(int MaxLength,int MaintanceBreaks,int MaintanceBreaksAvgLength,int Tasks,int TasksAvgLength,int Duration)
+{
+    Generator gen(MaxLength,MaintanceBreaks,MaintanceBreaksAvgLength,Tasks,TasksAvgLength,starting_population);
+    solutions=gen.GenerateSolution();
 }
 
 void Work::MainLoop(int Duration)

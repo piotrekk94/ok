@@ -451,7 +451,7 @@ void Solution::Save_Instance(const char * file_name,int instanceNumber)
 			fprintf(file,"%d;%d;%d;%d;\n",task[i].op[0],task[i].op[1],task[i].machine+1, (task[i].machine?0:1) +1);
 		}
 		for(int i=0; i <gap_amount[1]  ; i++)
-			fprintf(file,"%d;%d;%d\n",i,maintance[0][i].start,maintance[0][i].length);
+			fprintf(file,"%d;%d;%d\n",i,maintance[1][i].start,maintance[1][i].length);
 		fprintf(file,"*** EOF ***");
 	}
 	fclose(file);

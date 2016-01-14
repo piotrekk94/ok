@@ -16,29 +16,40 @@ int main(int argc,char** argv)
 	int starting_population=100;
 	int survival_amount=20;
 	Instance inst;
+	int temp;
+	scanf("%d\n",&temp );
+	bool load=temp;
+	bool save=!load;
+	int instancenumber=0;
 
-	//Generator gen(MaxLength,MaintanceBreaks,MaintanceBreaksAvgLength,Tasks,TasksAvgLength,starting_population);
-	//std::vector<Solution> solutions=gen.GenerateSolution();
-		//std::stringstream si,so;
-		//si<<"./input/i"<<i<<".txt";
-		//so<<"./output/o"<<i<<".txt";
-		//solutions[0].Save_Instance("inst.txt",1);
-		//solutions[i].InitSave((so.str()).c_str());
-		//solutions[i].Rate();
-		//inst solutions[0].Load_Instance("inst.txt");
+	if (load)
+	{
+		Solution temp;
+		std::stringstream si;
+		si<<"./input/i"<<instancenumber<<".txt";
+		Instance inst=temp.Load_Instance((si.str()).c_str());
+		//Tasks=inst.task.size();
+		//MaintanceBreaks=inst.maintance.size();
+	}
+
+	Generator gen(MaxLength,MaintanceBreaks,MaintanceBreaksAvgLength,Tasks,TasksAvgLength,starting_population);
+	std::vector<Solution> solutions=gen.GenerateSolution();
+	if (load)
+	{
+		//gen.ReplaceBreaks(inst);
+		//gen.ReplaceTasks(inst);
+	}
+	if (save)
+	{
+		std::stringstream so;
+		so<<"./input/i"<<instancenumber<<".txt";
+		solutions[0].Save_Instance((so.str()).c_str(),instancenumber);
+	}
+
 	while (j<2)
 	{
 		printf("%d %d\n",j,k );
-		//solutions.clear();
-		/*for (int i=0;i<starting_population;i++)
-		{
-			Solution solution;
-			std::vector<Answer> answer;
-			Instance instance = solution.Load_Instance((std::to_string(i).c_str()));
-			answer=GenerateAnswers(instance.task);
-			Solution solution2(&(instance.task.front()),&answer,&(instance.maintance.front()),&(instance.maintance.front()),instance.task.size(),instance.maintance.size(),instance.maintance.size());
-			solutions.push_back(solution2);
-		}*/
+
 		int mutation_percent=30;
 		int crossover_percent=70;
 		int mutation_amount=5;
@@ -80,7 +91,6 @@ int main(int argc,char** argv)
 		int powt=20;
 		for(int i=0;i<powt;i++)
 		{
-			Generator gen(MaxLength,MaintanceBreaks,MaintanceBreaksAvgLength,Tasks,TasksAvgLength,starting_population);
 			std::vector<Solution> solutions=gen.GenerateSolution();
 			Work job(starting_population,survival_amount,mutation_percent,mutation_amount,crossover_percent,tournament_groupsize,20);
 			job.Start(solutions,Duration);

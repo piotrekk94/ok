@@ -26,6 +26,4 @@ class Generator
     void GenerateInstance();
 };
 
-std::vector<Answer> GenerateAnswers(std::vector<Task> t);
-
 bool CompareBreaks(Maintance const& v1,Maintance const& v2);

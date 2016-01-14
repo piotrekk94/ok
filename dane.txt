@@ -1,4 +1,0 @@
-survival_amount = 20;
-starting_population = 100;
-crossover_percent = 70;
-mutation_percent = 30;

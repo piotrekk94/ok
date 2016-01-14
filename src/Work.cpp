@@ -84,7 +84,6 @@ void Work::Tournament()
         min = solutions[groups[i][j]].getRate() < solutions[groups[i][min]].getRate() ? j : min;
       for (int j=0;j<size;j++)
       {
-
         if (j!=min)solutions[groups[i][j]].markfordelete=true;
       }
     }
@@ -93,7 +92,6 @@ void Work::Tournament()
       if (solutions.size()==starting_population)break;
       if (solutions[i].markfordelete)solutions.erase(solutions.begin()+i--);
     }
-
     delete tab;
 }
 

@@ -91,6 +91,7 @@ std::vector<Solution> Generator::GenerateSolution()
         }
 	return result;
 }
+
 void Generator::GenerateMaintanceBreaks()
 {
 	Random length(MaintanceBreaksAvgLength*(1-MAX_DEVIATION_FROM_AVG),MaintanceBreaksAvgLength*(1+MAX_DEVIATION_FROM_AVG));
@@ -102,7 +103,7 @@ void Generator::GenerateMaintanceBreaks()
 		{
 			maint[0][i].start=start.Rand();
 			maint[0][i].length=length.Rand();
-  		if (i==0)ok=true;
+  		ok=true;
 			for (int j=0;j<i;j++)
 			{
 				if (maint[0][i].end()<maint[0][j].start||maint[0][i].start>maint[0][j].end())
@@ -139,4 +140,51 @@ void Generator::GenerateMaintanceBreaks()
 	{
 		//printf("%d %d %d %d\n",maint[0][i].start,maint[0][i].end(),maint[1][i].start,maint[1][i].end() );
 	}
+}
+
+std::vector<Answer> GenerateAnswers(std::vector<Task> t)
+{
+        int i=0,j=0,k;
+        int *tab=new int[t.size()];//tablica z informacja ktore zadania juz sa uporzadkowane 0-nie uporzadkowane 1-zadanie pierwsze uporzadkowane 2-uporzadkowane
+        for (int i=0;i<t.size();i++)tab[i]=0;
+        Answer temp={.mach={0,0}};
+        std::vector<Answer> answer;
+        answer.insert(answer.begin(),t.size(),temp);
+        while(i<t.size()||(j<t.size()))
+        {
+            k=rand()%t.size();
+            if(t[k].machine==0)
+            {
+                if (tab[k]==0)
+                {
+                    answer[k].mach[0]=i;
+                    i++;
+                    tab[k]++;
+                }
+                else if (tab[k]==1)
+                {
+                    answer[k].mach[1]=j;
+                    j++;
+                    tab[k]++;
+                }
+
+            }
+            else if(t[k].machine==1)
+            {
+                if (tab[k]==0)
+                {
+                    answer[k].mach[1]=j;
+                    j++;
+                    tab[k]++;
+                }
+                else if (tab[k]==1)
+                {
+                    answer[k].mach[0]=i;
+                    i++;
+                    tab[k]++;
+                }
+            }
+        }
+        delete tab;
+        return answer;
 }

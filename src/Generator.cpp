@@ -92,7 +92,7 @@ std::vector<Solution> Generator::GenerateSolution()
         for (int i=0;i<Population;i++)
         {
             std::vector<Answer> temp=GenerateAnswers();
-            Solution sol(task,&temp,maint[0],maint[1],Tasks,MaintanceBreaks,MaintanceBreaks);
+            Solution sol(task,&temp,maint[0],maint[1],Tasks,0,MaintanceBreaks);
             result.push_back(sol);
         }
 	return result;

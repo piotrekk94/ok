@@ -7,11 +7,11 @@ int main(int argc,char** argv)
 	int j=0,k=1;
 	FILE* plik;
 	plik=fopen("test.csv","w");
-	int MaxLength=500;
-	int MaintanceBreaks=10;
-	int MaintanceBreaksAvgLength=15;
+	int MaxLength=3500;
+	int MaintanceBreaks=100;
+	int MaintanceBreaksAvgLength=5;
 	int Tasks=100;
-	int TasksAvgLength=5;
+	int TasksAvgLength=25;
 	int Duration=1000;
 	int starting_population=100;
 	int survival_amount=20;
@@ -58,7 +58,7 @@ int main(int argc,char** argv)
 			case 0:
 				mutation_percent=k*10;
 				k++;
-				fprintf(plik, "mutation_percent %d,",mutation_percent );
+				fprintf(plik, "mutation_percent,%d,",mutation_percent );
 				if (k==10)
 				{
 					j++;
@@ -68,7 +68,7 @@ int main(int argc,char** argv)
 			case 1:
 				crossover_percent=k*10;
 				k++;
-				fprintf(plik, "crossover_percent %d,",crossover_percent );
+				fprintf(plik, "crossover_percent,%d,",crossover_percent );
 				if (k==10)
 				{
 					j++;
@@ -78,7 +78,7 @@ int main(int argc,char** argv)
 			case 2:
 				mutation_amount=k;
 				k++;
-				fprintf(plik, "mutation_amount %d,",mutation_amount );
+				fprintf(plik, "mutation_amount,%d,",mutation_amount );
 				if (k==10)
 				{
 					j++;

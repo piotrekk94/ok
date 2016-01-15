@@ -122,18 +122,19 @@ int Solution::Rate()
 			{
 				if (machine[0] < time[answer[i].mach[0]].mach[1])//co nastapilo pozniej zakonczenie operacji poprzedniej czy powiazanej
 				{//w tym czasie nic nie robilismy
-					int idle = (time[answer[i].mach[0]].mach[1] < maintance[0][gap[0]].start ? time[answer[i].mach[0]].mach[1] : maintance[0][gap[0]].start) - machine[0];
-	if (save)				M1 += Print("idle",M1IdleCounter++,1,machine[0],idle,idle,0);
+					if (gap[0]< gap_amount[0]) {idle = (time[answer[i].mach[0]].mach[1] < maintance[0][gap[0]].start ? time[answer[i].mach[0]].mach[1] : maintance[0][gap[0]].start) - machine[0];}
+					else idle = time[answer[i].mach[0]].mach[1]- machine[0];
+					if (save) M1 += Print("idle",M1IdleCounter++,1,machine[0],idle,idle,0);
 					machine[0] = time[answer[i].mach[0]].mach[1];//czekamy
 					idle_time.mach[0]+=idle;
 					while ((gap[0] < gap_amount[0]) && ((maintance[0][gap[0]].start) <= machine[0]))
 						{//trzeba je wypisac
-
-					if (save)		M1 += Print("maint",gap[0],1,maintance[0][gap[0]].start,maintance[0][gap[0]].length,maintance[0][gap[0]].length,0);
+							if (save) M1 += Print("maint",gap[0],1,maintance[0][gap[0]].start,maintance[0][gap[0]].length,maintance[0][gap[0]].length,0);
 							gap[0]++;//pomijamy te przerwy ktore minely gdzy czekalismy
 							if ((gap[0] < gap_amount[0]) && ((maintance[0][gap[0]].start) <= machine[0]))
 								{
-								if (save)	M1 += Print("idle",M1IdleCounter++,1,maintance[0][gap[0]-1].end(),idle = maintance[0][gap[0]-1].end()-maintance[0][gap[0]].start,idle,0);
+									idle = maintance[0][gap[0]].start - maintance[0][gap[0]-1].end();
+									if (save) M1 += Print("idle",M1IdleCounter++,1,maintance[0][gap[0]-1].end(),idle,idle,0);
 									idle_time.mach[0]+=idle;
 								}
 						}
@@ -172,17 +173,20 @@ int Solution::Rate()
 			{
 				if (machine[1] < time[answer[j].mach[1]].mach[0])//co nastapilo pozniej zakonczenie operacji poprzedniej czy powiazanej
 				{//w tym czasie nic nie robilismy
-					int idle = (time[answer[j].mach[1]].mach[0] < maintance[1][gap[1]].start ? time[answer[j].mach[1]].mach[0] : maintance[1][gap[1]].start) - machine[1];
-			if (save)		M2 += Print("idle",M2IdleCounter++,1,machine[1],idle,idle,1);
+					if (gap[1] < gap_amount[1]){ idle = (time[answer[j].mach[1]].mach[0] < maintance[1][gap[1]].start ? time[answer[j].mach[1]].mach[0] : maintance[1][gap[1]].start) - machine[1];}
+					else idle = time[answer[j].mach[1]].mach[0] - machine[1];
+					if (save) M2 += Print("idle",M2IdleCounter++,1,machine[1],idle,idle,1);
 					machine[1] = time[answer[j].mach[1]].mach[0];
 					idle_time.mach[1]+=idle;
 					while ((gap[1] < gap_amount[1]) && ((maintance[1][gap[1]].start) <= machine[1]))
 						{
-					if (save)		M2 += Print("maint",gap[1],1,maintance[1][gap[1]].start,maintance[1][gap[1]].length,maintance[1][gap[1]].length,1);
+							if (save) M2 += Print("maint",gap[1],1,maintance[1][gap[1]].start,maintance[1][gap[1]].length,maintance[1][gap[1]].length,1);
 							gap[1]++;//pomijamy te przerwy ktore minely gdzy czekalismy
 							if ((gap[1] < gap_amount[1]) && ((maintance[1][gap[1]].start) <= machine[1]))
 								{
-							if (save)	M2 += Print("idle",M2IdleCounter++,1,maintance[1][gap[1]-1].end(),idle = maintance[1][gap[1]-1].end()-maintance[1][gap[1]].start,idle,1);
+								idle =maintance[1][gap[1]].start - maintance[1][gap[1]-1].end();
+								if (save) M2 += Print("idle",M2IdleCounter++,1,maintance[1][gap[1]-1].end(),idle,idle,1);
+								
 								idle_time.mach[1]+=idle;
 								}
 
@@ -195,10 +199,10 @@ int Solution::Rate()
 				//liczenie przerw technicznych
 				if ((gap[1] < gap_amount[1]) && ((maintance[1][gap[1]].start) < machine[1]))
 					{
-					machine[1]+=(task[answer[j].mach[2]].op[1-task[answer[j].mach[1]].machine]+3)*3/10;
-					realtime+=(task[answer[j].mach[2]].op[1-task[answer[j].mach[1]].machine]+3)*3/10;
+					machine[1]+=(task[answer[j].mach[1]].op[1-task[answer[j].mach[1]].machine]+3)*3/10;
+					realtime+=(task[answer[j].mach[1]].op[1-task[answer[j].mach[1]].machine]+3)*3/10;
 					}
-			if (save)	M2 += Print("op",answer[j].mach[1],task[answer[j].mach[1]].machine,start,task[answer[j].mach[1]].op[task[answer[j].mach[1]].machine],realtime,1);
+				if (save) M2 += Print("op",answer[j].mach[1],task[answer[j].mach[1]].machine,start,task[answer[j].mach[1]].op[task[answer[j].mach[1]].machine],realtime,1);
 				while ((gap[1] < gap_amount[1]) && ((maintance[1][gap[1]].start) < machine[1]))
 				{
 				if (save)	M2 += Print("maint",gap[1],1,maintance[1][gap[1]].start,maintance[1][gap[1]].length,maintance[1][gap[1]].length,1);
@@ -325,7 +329,6 @@ void Solution::Mutate(int machine)
 	temp = answer[a].mach[machine];
 	answer[a].mach[machine] = answer[b].mach[machine];
 	answer[b].mach[machine] = temp;
-	Rate();
 }
 void Solution::MultiMutate(int machine,int MutationAmount)
 {
@@ -333,6 +336,7 @@ void Solution::MultiMutate(int machine,int MutationAmount)
 	{
 		Mutate(machine);
 	}
+	Rate();
 }
 Solution* Solution::Tournament(Solution *solution_table, int amount)//chyba lepiej bedzie to zrobic poza klasa
 {
@@ -351,8 +355,9 @@ void Solution::Crossover(Solution &parent,Solution &crossovered)
 	//	Solution crossovered(task,nullptr,maintance[0],maintance[1],size,gap_amount[0],gap_amount[1]);
 	crossovered=parent;
 	Random Rand(size/5,4*size/5);
-	int half = Rand.Rand();
-	//int j=0;
+	int dividePoint1 = Rand.Rand();
+	int dividePoint2 = Rand.Rand();
+	int j=0;
 	int k=0;
 	Answer tab[size];
 	for(int i=0; i < size ; i++)
@@ -360,41 +365,20 @@ void Solution::Crossover(Solution &parent,Solution &crossovered)
 		tab[i].mach[0]=0;
 		tab[i].mach[1]=0;
 	}
-	for(k=0; k < half ; k++)
+	if (symetricDivide) dividePoint1=dividePoint2;
+	for(k=0; k < dividePoint1 ; k++)
 	{
 		tab[crossovered.answer[k].mach[0]].mach[0]=1;
-		tab[crossovered.answer[k].mach[1]].mach[1]=1;
 	}
-	int j = k;
+	for(j=0; j < dividePoint2 ; j++)
+	{
+		tab[crossovered.answer[j].mach[1]].mach[1]=1;
+	}
 	for(int i=0; i < size ; i++)
 	{
 		if (tab[answer[i].mach[0]].mach[0] == 0) crossovered.answer[k++].mach[0]=answer[i].mach[0];
 		if (tab[answer[i].mach[1]].mach[1] == 0) crossovered.answer[j++].mach[1]=answer[i].mach[1];
 	}
-	/*
-	for (int i=0; i < size ; i++)
-	{
-		if (this->answer[i].mach[0] < half)
-		{
-			crossovered.answer[j++].mach[0]=this->answer[i].mach[0];
-		}
-		if (this->answer[i].mach[1] < half)
-		{
-			crossovered.answer[k++].mach[1]=this->answer[i].mach[1];
-		}
-	}
-	for (int i=0; i < size ; i++)
-	{
-		if (parent.answer[i].mach[0] >= half)
-		{
-			crossovered.answer[j++].mach[0]=parent.answer[i].mach[0];
-		}
-		if (parent.answer[i].mach[1] >= half)
-		{
-			crossovered.answer[k++].mach[1]=parent.answer[i].mach[1];
-		}
-	}
-	*/
 	crossovered.Rate();
 
 }
@@ -412,7 +396,7 @@ Instance Solution::Load_Instance(const char * file_name)
 {
 	Instance instance;
 	FILE *file = fopen(file_name,"r");
-	if (file == NULL) perror("error plik nie zostal wczytany");
+	if (file == nullptr) perror("error plik nie zostal wczytany");
 	else
 	{
 		int taskSize;
@@ -434,6 +418,7 @@ Instance Solution::Load_Instance(const char * file_name)
 			fscanf(file,"%d;%d;%d\n",&number,&temp.start,&temp.length);
 			instance.maintance.push_back(temp);
 		}
+		fclose(file);
 	}
 
 	return instance;
@@ -453,6 +438,6 @@ void Solution::Save_Instance(const char * file_name,int instanceNumber)
 		for(int i=0; i <gap_amount[1]  ; i++)
 			fprintf(file,"%d;%d;%d\n",i,maintance[1][i].start,maintance[1][i].length);
 		fprintf(file,"*** EOF ***");
+		fclose(file);
 	}
-	fclose(file);
 }

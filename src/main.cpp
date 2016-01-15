@@ -22,6 +22,9 @@ int main(int argc,char** argv)
 	bool save=!load;
 	int instancenumber=0;
 
+	Random random(10,50,1);
+	for(int i=0; i<50 ; i++) printf("%d\n",random.Rand());
+/*
 	if (load)
 	{
 		Solution temp;
@@ -133,6 +136,8 @@ int main(int argc,char** argv)
 		fprintf(plik,"%d,%d,%d\n",100*sum/sum2,length/powt,t/powt);
 	}
 	fclose(plik);
+*/
+
 		/*
 		   Solution solution;
 		   std::vector<Answer> answer;

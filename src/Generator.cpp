@@ -142,7 +142,7 @@ void Generator::GenerateMaintanceBreaks()
 			}
 		}
 	}
-	std::sort(maint[1],maint[1]+MaintanceBreaks-1,CompareBreaks);
+	std::sort(maint[1],maint[1]+MaintanceBreaks,CompareBreaks);
 }
 
 bool CompareBreaks(Maintance const& v1,Maintance const& v2)

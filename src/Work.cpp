@@ -53,12 +53,19 @@ void Work::MainLoop(int Duration)
         Mutations();
         Crossingover();
         Tournament();
+        bool stagnation=false;
         int min=0;
         for (int i=0;i<solutions.size();i++)
           min = solutions[i].getRate() < solutions[min].getRate() ? i : min;
         minhistory.push_back(solutions[min].getRate());
         c_end = std::clock();
-        if (NoChanges())break;
+        if (NoChanges(change_check_distance/2)&&!stagnation)
+        {
+          stagnation=true;
+          mutation_percent=mutation_percent*2>100?90:mutation_percent*2;
+          crossover_percent/=2;
+        }
+        if (NoChanges(change_check_distance))break;
     }
     printf("%d,%d\n",minhistory[0],minhistory[minhistory.size()-1] );
 }
@@ -143,9 +150,9 @@ void Work::Crossingover()
   }
 }
 
-bool Work::NoChanges()
+bool Work::NoChanges(int distance)
 {
-  if (minhistory.size()>=change_check_distance)
-    if (minhistory[minhistory.size()-1]==minhistory[minhistory.size()-change_check_distance-1]) return true;
+  if (minhistory.size()>=distance)
+    if (minhistory[minhistory.size()-1]==minhistory[minhistory.size()-distance-1]) return true;
   return false;
 }

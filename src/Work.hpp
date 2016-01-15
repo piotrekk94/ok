@@ -21,7 +21,7 @@ private:
     void Mutations();
     void Crossingover();
     void Generate(int MaxLength,int MaintanceBreaks,int MaintanceBreaksAvgLength,int Tasks,int TasksAvgLength,int Duration);
-    bool NoChanges();
+    bool NoChanges(int distance);
     std::vector<Solution> solutions;
     int starting_population;
     int survival_amount;

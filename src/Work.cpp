@@ -48,6 +48,8 @@ void Work::MainLoop(int Duration)
       minhistory[0] = solutions[i].getRate() < minhistory[0] ? solutions[i].getRate() : minhistory[0];
     }
     std::clock_t c_end,c_start = std::clock();
+    int prev_mp,prev_cp;
+
     while(1000 * (c_end-c_start) / CLOCKS_PER_SEC<Duration)
     {
         Mutations();
@@ -62,12 +64,20 @@ void Work::MainLoop(int Duration)
         if (NoChanges(change_check_distance/2)&&!stagnation)
         {
           stagnation=true;
+          prev_mp=mutation_percent;
+          prev_cp=crossover_percent;
           mutation_percent=mutation_percent*2>100?90:mutation_percent*2;
           crossover_percent/=2;
         }
+        if(!NoChanges(change_check_distance/2)&&stagnation)
+        {
+          mutation_percent=prev_mp;
+          crossover_percent=prev_cp;
+        }
+
         if (NoChanges(change_check_distance))break;
     }
-    printf("%d,%d\n",minhistory[0],minhistory[minhistory.size()-1] );
+    printf("%d,%d,%d\n",minhistory[0],minhistory[minhistory.size()-1],minhistory.size() );
 }
 void Work::Tournament()
 {

@@ -46,12 +46,12 @@ int main(int argc,char** argv)
 		solutions[0].Save_Instance((so.str()).c_str(),instancenumber);
 	}
 
-	while (j<3)
+	while (j<5)
 	{
 		printf("%d %d\n",j,k );
 
-		int mutation_percent=30;
-		int crossover_percent=70;
+		int mutation_percent=0;
+		int crossover_percent=0;
 		int mutation_amount=1;
 		int tournament_groupsize=3;
 		switch (j) {
@@ -66,6 +66,17 @@ int main(int argc,char** argv)
 				}
 				break;
 			case 1:
+				crossover_percent=70;
+				mutation_percent=k*5;
+				k++;
+				fprintf(plik, "mutation_percent,%d,",mutation_percent );
+				if (k==21)
+				{
+					j++;
+					k=1;
+				}
+			break;
+			case 2:
 				crossover_percent=k*5;
 				k++;
 				fprintf(plik, "crossover_percent,%d,",crossover_percent );
@@ -74,8 +85,19 @@ int main(int argc,char** argv)
 					j++;
 					k=1;
 				}
-				break;
-			case 2:
+			break;
+			case 3:
+				mutation_percent=30;
+				crossover_percent=k*5;
+				k++;
+				fprintf(plik, "crossover_percent,%d,",crossover_percent );
+				if (k==21)
+				{
+					j++;
+					k=1;
+				}
+			break;
+			case 4:
 				mutation_amount=k;
 				k++;
 				fprintf(plik, "mutation_amount,%d,",mutation_amount );
@@ -88,7 +110,8 @@ int main(int argc,char** argv)
 		}
 		int sum=0;
 		int sum2=0;
-		int powt=3;
+		int powt=1;
+		int length=0;
 		for(int i=0;i<powt;i++)
 		{
 			//std::vector<Solution> solutions=gen.GenerateSolution();
@@ -96,8 +119,9 @@ int main(int argc,char** argv)
 			job.Start(solutions,Duration);
 			sum+=job.minhistory[0]-job.minhistory[job.minhistory.size()-1];
 			sum2+=job.minhistory[0];
+			length+=job.minhistory.size();
 		}
-		fprintf(plik,"%d\n",100*sum/sum2);
+		fprintf(plik,"%d,%d\n",100*sum/sum2,length/powt);
 	}
 	fclose(plik);
 		/*

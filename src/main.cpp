@@ -99,6 +99,8 @@ int main(int argc,char** argv)
 			break;
 			case 4:
 				mutation_amount=k;
+				int mutation_percent=30;
+				int crossover_percent=70;
 				k++;
 				fprintf(plik, "mutation_amount,%d,",mutation_amount );
 				if (k==5)
@@ -110,18 +112,25 @@ int main(int argc,char** argv)
 		}
 		int sum=0;
 		int sum2=0;
-		int powt=1;
+		int powt=5;
 		int length=0;
+		std::clock_t c_end,c_start;
+		int t=0;
 		for(int i=0;i<powt;i++)
 		{
 			//std::vector<Solution> solutions=gen.GenerateSolution();
+			int prev_mp,prev_cp;
 			Work job(starting_population,survival_amount,mutation_percent,mutation_amount,crossover_percent,tournament_groupsize,20);
+			c_start=std::clock();
 			job.Start(solutions,Duration);
+			c_end=std::clock();
 			sum+=job.minhistory[0]-job.minhistory[job.minhistory.size()-1];
 			sum2+=job.minhistory[0];
 			length+=job.minhistory.size();
+			t+=1000*(c_end-c_start)/CLOCKS_PER_SEC;
 		}
-		fprintf(plik,"%d,%d\n",100*sum/sum2,length/powt);
+
+		fprintf(plik,"%d,%d,%d\n",100*sum/sum2,length/powt,t/powt);
 	}
 	fclose(plik);
 		/*

@@ -54,6 +54,8 @@ void Work::MainLoop(int Duration)
     {
         Mutations();
         Crossingover();
+        for (int i=0;i<solutions.size();i++)
+          solutions[i].Rate();
         Tournament();
         bool stagnation=false;
         int min=0;
@@ -66,8 +68,8 @@ void Work::MainLoop(int Duration)
           stagnation=true;
           prev_mp=mutation_percent;
           prev_cp=crossover_percent;
-          mutation_percent=mutation_percent*2>100?90:mutation_percent*2;
-          crossover_percent/=2;
+          mutation_percent=prev_cp;
+          crossover_percent=prev_mp;
         }
         if(!NoChanges(change_check_distance/2)&&stagnation)
         {
@@ -132,6 +134,7 @@ void Work::Mutations()
   int size=solutions.size();
   for (int i=0;i<mutation_percent*size/100;i++)
   {
+      rand.Change(0,solutions.size()-1);
       int j=rand.Rand();
       solutions.insert(solutions.end(),solutions[j]);
       solutions[j].MultiMutate(rand.Rand()%2,mutation_amount);
@@ -154,6 +157,7 @@ void Work::Crossingover()
   int size=solutions.size();
   for (int i=0;i<crossover_percent*size/100;i++)
   {
+      rand.Change(0,solutions.size()-1);
       int j=rand.Rand();
       int k=rand.Rand();
       solutions.insert(solutions.end(),solutions[j]);

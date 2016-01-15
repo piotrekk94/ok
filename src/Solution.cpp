@@ -186,7 +186,7 @@ int Solution::Rate()
 								{
 								idle =maintance[1][gap[1]].start - maintance[1][gap[1]-1].end();
 								if (save) M2 += Print("idle",M2IdleCounter++,1,maintance[1][gap[1]-1].end(),idle,idle,1);
-								
+
 								idle_time.mach[1]+=idle;
 								}
 

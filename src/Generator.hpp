@@ -7,7 +7,7 @@
 #include "Random.hpp"
 #include "time.h"
 
-#define MAX_DEVIATION_FROM_AVG 0.5
+#define MAX_DEVIATION_FROM_AVG 0.7
 
 class Generator
 {

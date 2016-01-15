@@ -31,7 +31,7 @@ void Generator::GenerateInstance()
 }
 void Generator::GenerateTasks()
 {
-	Random op(TasksAvgLength*(1-MAX_DEVIATION_FROM_AVG),TasksAvgLength*(1+MAX_DEVIATION_FROM_AVG));
+	Random op(TasksAvgLength*(1-MAX_DEVIATION_FROM_AVG),TasksAvgLength*(1+MAX_DEVIATION_FROM_AVG),1);
 	for(int i=0;i<Tasks;i++)
 		{
 			task[i].machine=rand()%2;

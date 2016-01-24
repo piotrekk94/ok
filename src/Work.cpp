@@ -54,8 +54,6 @@ void Work::MainLoop(int Duration)
     {
         Mutations();
         Crossingover();
-        for (int i=0;i<solutions.size();i++)
-          solutions[i].Rate();
         Tournament();
         bool stagnation=false;
         int min=0;
@@ -139,16 +137,6 @@ void Work::Mutations()
       solutions.insert(solutions.end(),solutions[j]);
       solutions[j].MultiMutate(rand.Rand()%2,mutation_amount);
   }
-  rand.Change(0,solutions.size()-1);
-  /*if (NoChanges())
-  {
-    for (int j=0;j<5;j++)
-    {
-      int i=rand.Rand();
-      solutions.insert(solutions.end(),solutions[i]);
-      solutions[i].Swap();
-    }
-  }*/
 }
 
 void Work::Crossingover()

@@ -33,17 +33,17 @@ int main(int argc,char** argv)
 		Solution temp;
 		std::stringstream si;
 		si<<"./input/i"<<instancenumber<<".txt";
-		Instance inst=temp.Load_Instance((si.str()).c_str());
-		//Tasks=inst.task.size();
-		//MaintanceBreaks=inst.maintance.size();
+		inst=temp.Load_Instance((si.str()).c_str());
+		Tasks=inst.task.size();
+		MaintanceBreaks=inst.maintance.size();
 	}
 
 	Generator gen(MaxLength,MaintanceBreaks,MaintanceBreaksAvgLength,Tasks,TasksAvgLength,starting_population);
 	std::vector<Solution> solutions=gen.GenerateSolution();
 	if (load)
 	{
-		//gen.ReplaceBreaks(inst);
-		//gen.ReplaceTasks(inst);
+		gen.ReplaceBreaks(inst);
+		gen.ReplaceTasks(inst);
 	}
 	if (save)
 	{
@@ -91,7 +91,6 @@ int main(int argc,char** argv)
 		int t=0;
 		for(int i=0;i<powt;i++)
 		{
-			//std::vector<Solution> solutions=gen.GenerateSolution();
 			int prev_mp,prev_cp;
 			Work job(starting_population,survival_amount,mutation_percent,mutation_amount,crossover_percent,tournament_groupsize,100);
 			c_start=std::clock();

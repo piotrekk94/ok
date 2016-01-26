@@ -61,31 +61,34 @@ int main(int argc,char** argv)
 
 		int mutation_amount=1;
 		int tournament_groupsize=3;
-		switch (j) {
-			case 0:
-				mutation_percent=k*5;
-				crossover_percent=100-mutation_percent;
-				k++;
-				fprintf(plik, "mutation/crossover,%d,%d,",mutation_percent,crossover_percent );
-				if (k==21)
-				{
-					j++;
-					k=1;
+		if (!randanswer)
+			{
+				switch (j) {
+					case 0:
+						mutation_percent=k*5;
+						crossover_percent=100-mutation_percent;
+						k++;
+						fprintf(plik, "mutation/crossover,%d,%d,",mutation_percent,crossover_percent );
+						if (k==21)
+						{
+							j++;
+							k=1;
+						}
+						break;
+					case 1:
+						mutation_amount=k;
+						mutation_percent=30;
+						crossover_percent=70;
+						k++;
+						fprintf(plik, "mutation_amount,%d,",mutation_amount );
+						if (k==5)
+						{
+							j++;
+							k=1;
+						}
+						break;
 				}
-				break;
-			case 1:
-				mutation_amount=k;
-				mutation_percent=30;
-				crossover_percent=70;
-				k++;
-				fprintf(plik, "mutation_amount,%d,",mutation_amount );
-				if (k==5)
-				{
-					j++;
-					k=1;
-				}
-				break;
-		}
+			}
 		int sum=0;
 		int sum2=0;
 		int powt=1;

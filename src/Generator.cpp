@@ -84,6 +84,7 @@ std::vector<Answer> Generator::GenerateAnswers()
             }
         }
         delete tab;
+		std::random_shuffle(answer.begin(),answer.end());
         return answer;
 }
 std::vector<Solution> Generator::GenerateSolution()

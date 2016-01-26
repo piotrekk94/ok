@@ -7,8 +7,8 @@ int main(int argc,char** argv)
 	int j=0,k=0;
 	FILE* plik;
 	plik=fopen("test.csv","w");
-	int MaxLength=60000;
-	int MaintanceBreaks=80;
+	int MaxLength=25000;
+	int MaintanceBreaks=250;
 	int MaintanceBreaksAvgLength=5;
 	int Tasks=500;
 	int TasksAvgLength=50;

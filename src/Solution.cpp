@@ -197,14 +197,18 @@ int Solution::Rate()
 				machine[1] += task[answer[j].mach[1]].op[1-task[answer[j].mach[1]].machine];
 				realtime= task[answer[j].mach[1]].op[1-task[answer[j].mach[1]].machine];
 				//liczenie przerw technicznych
-				if ((gap[1] < gap_amount[1]) && ((maintance[1][gap[1]].start) < machine[1]))
+				if ((gap[1] < gap_amount[1]) && ((maintance[1][gap[1]].start) < machine[1]))//kara za przerwanie zadania jednokrotna
 					{
+					/*
 					machine[1]+=(task[answer[j].mach[1]].op[1-task[answer[j].mach[1]].machine]+3)*3/10;
 					realtime+=(task[answer[j].mach[1]].op[1-task[answer[j].mach[1]].machine]+3)*3/10;
+					*/
 					}
 				if (save) M2 += Print("op",answer[j].mach[1],task[answer[j].mach[1]].machine,start,task[answer[j].mach[1]].op[task[answer[j].mach[1]].machine],realtime,1);
 				while ((gap[1] < gap_amount[1]) && ((maintance[1][gap[1]].start) < machine[1]))
 				{
+					machine[1]+=(task[answer[j].mach[1]].op[1-task[answer[j].mach[1]].machine]+3)*3/10;//wielokrotne
+					realtime+=(task[answer[j].mach[1]].op[1-task[answer[j].mach[1]].machine]+3)*3/10;
 				if (save)	M2 += Print("maint",gap[1],1,maintance[1][gap[1]].start,maintance[1][gap[1]].length,maintance[1][gap[1]].length,1);
 					machine[1] += maintance[1][gap[1]++].length; //liczenie przerw technicznych
 				}

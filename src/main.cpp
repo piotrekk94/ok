@@ -89,6 +89,11 @@ int main(int argc,char** argv)
 						break;
 				}
 			}
+		else
+		{
+			j=2;
+			change_check_distance=0;
+		}
 		int sum=0;
 		int sum2=0;
 		int powt=1;

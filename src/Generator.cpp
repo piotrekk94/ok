@@ -39,7 +39,21 @@ void Generator::GenerateTasks()
 			task[i].op[1]=op.Rand();
 		}
 }
+
 std::vector<Answer> Generator::GenerateAnswers()
+{
+        Answer temp;
+        std::vector<Answer> answer;
+				for (int i=0;i<Tasks;i++)
+				{
+					temp.mach[0]=i;
+					temp.mach[1]=i;
+					answer.push_back(temp);
+				}
+				std::random_shuffle(answer.begin(),answer.end());
+        return answer;
+}
+std::vector<Answer> Generator::GenerateAnswersV2()
 {
         int i=0,j=0,k;
         int *tab=new int[Tasks];//tablica z informacja ktore zadania juz sa uporzadkowane 0-nie uporzadkowane 1-zadanie pierwsze uporzadkowane 2-uporzadkowane
@@ -84,7 +98,6 @@ std::vector<Answer> Generator::GenerateAnswers()
             }
         }
         delete tab;
-		std::random_shuffle(answer.begin(),answer.end());
         return answer;
 }
 std::vector<Solution> Generator::GenerateSolution()
@@ -103,26 +116,6 @@ void Generator::GenerateMaintanceBreaks()
 {
 	Random length(MaintanceBreaksAvgLength*(1-MAX_DEVIATION_FROM_AVG),MaintanceBreaksAvgLength*(1+MAX_DEVIATION_FROM_AVG));
 	Random start(0,MaxLength);
-	/*for (int i=0;i<MaintanceBreaks;i++)
-	{
-		bool ok=false;
-		while(!ok)
-		{
-			maint[0][i].start=start.Rand();
-			maint[0][i].length=length.Rand();
-  		ok=true;
-			for (int j=0;j<i;j++)
-			{
-				if (maint[0][i].end()<maint[0][j].start||maint[0][i].start>maint[0][j].end())
-					ok=true;
-				else
-				{
-					ok=false;
-					break;
-				}
-			}
-		}
-	}*/
 	for (int i=0;i<MaintanceBreaks;i++)
 	{
 		bool ok=false;

@@ -11,7 +11,7 @@ Work::Work()
   //tournament_groupsize=ld.file_data.tournament_groupsize;
 }
 
-Work::Work(int starting_population,int survival_amount,int mutation_percent,int mutation_amount,int crossover_percent,int tournament_groupsize,int change_check_distance)
+Work::Work(int starting_population,int survival_amount,int mutation_percent,int mutation_amount,int crossover_percent,int tournament_groupsize,int change_check_distance,bool randanswer)
 {
   this->starting_population=starting_population;
   this->survival_amount=survival_amount;
@@ -20,6 +20,7 @@ Work::Work(int starting_population,int survival_amount,int mutation_percent,int 
   this->crossover_percent=crossover_percent;
   this->tournament_groupsize=tournament_groupsize;
   this->change_check_distance=change_check_distance;
+  this->randanswer=randanswer;
 }
 
 void Work::Start(std::vector<Solution> s,int Duration)
@@ -52,9 +53,12 @@ void Work::MainLoop(int Duration)
     c_end=c_start=std::clock();
     while(1000 * (c_end-c_start) / CLOCKS_PER_SEC<Duration)
     {
-        Mutations();
-        Crossingover();
-        Tournament();
+        if (!randanswer)
+        {
+          Mutations();
+          Crossingover();
+          Tournament();
+        }
         bool stagnation=false;
         int min=0;
         for (int i=0;i<solutions.size();i++)
@@ -74,7 +78,6 @@ void Work::MainLoop(int Duration)
           mutation_percent=prev_mp;
           crossover_percent=prev_cp;
         }
-
         if (NoChanges(change_check_distance))break;
     }
     c_temp=std::clock()-c_start;

@@ -23,6 +23,7 @@ class Generator
 		void GenerateMaintanceBreaks();
 		void GenerateTasks();
 		std::vector<Answer> GenerateAnswers();
+		std::vector<Answer> GenerateAnswersV2();
     void GenerateInstance();
 };
 

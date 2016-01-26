@@ -15,18 +15,21 @@ int main(int argc,char** argv)
 	int Duration=30000;
 	int starting_population=100;
 	int survival_amount=50;
+	int change_check_distance=100;
 	Instance inst;
 	int temp;
 	scanf("%d",&temp );
 	bool load=temp;
-	bool save=!load;
+	scanf("%d",&temp );
+	//bool save=!load;
+	bool save=false;
+	bool randanswer=temp;
+	if (randanswer)starting_population*=10000;
 	int instancenumber=0;
 
 	int mutation_percent;
 	int crossover_percent;
 
-	//Random random(10,50,1);
-	//for(int i=0; i<50 ; i++) printf("%d\n",random.Rand());
 
 	if (load)
 	{
@@ -92,7 +95,7 @@ int main(int argc,char** argv)
 		for(int i=0;i<powt;i++)
 		{
 			int prev_mp,prev_cp;
-			Work job(starting_population,survival_amount,mutation_percent,mutation_amount,crossover_percent,tournament_groupsize,100);
+			Work job(starting_population,survival_amount,mutation_percent,mutation_amount,crossover_percent,tournament_groupsize,change_check_distance,randanswer);
 			c_start=std::clock();
 			job.Start(solutions,Duration);
 			c_end=std::clock();
@@ -101,7 +104,6 @@ int main(int argc,char** argv)
 			length+=job.minhistory.size();
 			t+=1000*(c_end-c_start)/CLOCKS_PER_SEC;
 		}
-
 		fprintf(plik,"%d,%d,%d\n",100*sum/sum2,length/powt,t/powt);
 	}
 	fclose(plik);

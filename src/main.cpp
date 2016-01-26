@@ -14,7 +14,7 @@ int main(int argc,char** argv)
 	int TasksAvgLength=50;
 	int Duration=30000;
 	int starting_population=100;
-	int survival_amount=50;
+	int survival_amount=100;
 	int change_check_distance=100;
 	Instance inst;
 	int temp;
@@ -24,7 +24,7 @@ int main(int argc,char** argv)
 	//bool save=!load;
 	bool save=false;
 	bool randanswer=temp;
-	if (randanswer)starting_population*=10000;
+	if (randanswer)starting_population*=1000;
 	int instancenumber=0;
 
 	int mutation_percent;

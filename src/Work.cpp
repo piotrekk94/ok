@@ -121,7 +121,7 @@ void Work::Tournament()
     }
     for (int i=0;i<solutions.size();i++)
     {
-      if (solutions.size()==starting_population)break;
+      if (solutions.size()==survival_amount)break;
       if (solutions[i].markfordelete)solutions.erase(solutions.begin()+i--);
     }
     for (int i=0;i<solutions.size();i++)

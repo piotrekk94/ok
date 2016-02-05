@@ -29,6 +29,10 @@ class Solution
 		void Crossover(Solution &parent,Solution &crossovered);//wylicza wartość nowo stworzonej odpowiedzi
 		/////////////////////////////////////////////
 
+		std::vector<Answer> answer;
+
+		/////////////////////////////////////////////
+
 		Instance Load_Instance(const char * file_name);
 		void Save_Instance(const char * file_name,int instanceNumber);
 		/////////////////////////////////////////////
@@ -40,7 +44,6 @@ class Solution
 		int size;
 		std::shared_ptr<Random> linearRandom;
 		int rate=0;
-		std::vector<Answer> answer;
 		int created = 0;
 		void PrintAnswers();
 		std::string Print(std::string type,int count,int op, int start,int length, int real_length,int machine);

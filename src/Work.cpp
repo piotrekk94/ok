@@ -59,26 +59,33 @@ void Work::MainLoop(int Duration)
           Crossingover();
           Tournament();
         }
+        else
+        {
+          std::random_shuffle(solutions[0].answer.begin(),solutions[0].answer.end());
+        }
         bool stagnation=false;
         int min=0;
         for (int i=0;i<solutions.size();i++)
           min = solutions[i].getRate() < solutions[min].getRate() ? i : min;
         minhistory.push_back(solutions[min].getRate());
         c_end = std::clock();
-        if (NoChanges(change_check_distance/2)&&!stagnation)
+        if(!randanswer)
         {
-          stagnation=true;
-          prev_mp=mutation_percent;
-          prev_cp=crossover_percent;
-          mutation_percent=prev_cp;
-          crossover_percent=prev_mp;
+          if (NoChanges(change_check_distance/2)&&!stagnation)
+          {
+            stagnation=true;
+            prev_mp=mutation_percent;
+            prev_cp=crossover_percent;
+            mutation_percent=prev_cp;
+            crossover_percent=prev_mp;
+          }
+          if(!NoChanges(change_check_distance/2)&&stagnation)
+          {
+            mutation_percent=prev_mp;
+            crossover_percent=prev_cp;
+          }
+          if (NoChanges(change_check_distance))break;
         }
-        if(!NoChanges(change_check_distance/2)&&stagnation)
-        {
-          mutation_percent=prev_mp;
-          crossover_percent=prev_cp;
-        }
-        if (NoChanges(change_check_distance))break;
     }
     c_temp=std::clock()-c_start;
     printf("%d,%d,%d,%d\n",minhistory[0],minhistory[minhistory.size()-1],minhistory.size(),1000*c_temp/CLOCKS_PER_SEC );

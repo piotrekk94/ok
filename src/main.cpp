@@ -12,7 +12,7 @@ int main(int argc,char** argv)
 	int MaintanceBreaksAvgLength=5;
 	int Tasks=500;
 	int TasksAvgLength=50;
-	int Duration=30000;
+	int Duration=5000;
 	int starting_population=100;
 	int survival_amount=100;
 	int change_check_distance=100;
@@ -21,10 +21,9 @@ int main(int argc,char** argv)
 	scanf("%d",&temp );
 	bool load=temp;
 	scanf("%d",&temp );
-	//bool save=!load;
-	bool save=false;
+	bool save=!load;
 	bool randanswer=temp;
-	if (randanswer)starting_population*=1000;
+	if (randanswer)starting_population=1;
 	int instancenumber=0;
 
 	int mutation_percent;

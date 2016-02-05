@@ -66,7 +66,23 @@ void Work::MainLoop(int Duration)
         }
         else
         {
-          std::random_shuffle(solutions[0].answer.begin(),solutions[0].answer.end());
+          int **tab=new int*[2];
+          int Tasks=solutions[0].answer.size();
+          tab[0]=new int[Tasks];
+          tab[1]=new int[Tasks];
+          for (int i=0;i<Tasks;i++){
+            tab[0][i]=i;
+            tab[1][i]=i;
+          }
+
+          std::random_shuffle(&tab[0][0],&tab[0][Tasks]);
+          std::random_shuffle(&tab[1][0],&tab[1][Tasks]);
+
+          for (int i=0;i<Tasks;i++)
+          {
+            solutions[0].answer[i].mach[0]=tab[0][i];
+            solutions[0].answer[i].mach[1]=tab[1][i];
+          }
           minhistory.push_back(solutions[0].getRate());
           printf("%d\n", solutions[0].getRate());
         }

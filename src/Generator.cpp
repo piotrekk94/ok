@@ -44,13 +44,23 @@ std::vector<Answer> Generator::GenerateAnswers()
 {
         Answer temp;
         std::vector<Answer> answer;
+				int **tab=new int*[2];
+				tab[0]=new int[Tasks];
+				tab[1]=new int[Tasks];
+				for (int i=0;i<Tasks;i++){
+					tab[0][i]=i;
+					tab[1][i]=i;
+				}
+
+				std::random_shuffle(&tab[0][0],&tab[0][Tasks]);
+				std::random_shuffle(&tab[1][0],&tab[1][Tasks]);
+
 				for (int i=0;i<Tasks;i++)
 				{
-					temp.mach[0]=i;
-					temp.mach[1]=i;
+					temp.mach[0]=tab[0][i];
+					temp.mach[1]=tab[1][i];
 					answer.push_back(temp);
 				}
-				std::random_shuffle(answer.begin(),answer.end());
         return answer;
 }
 std::vector<Answer> Generator::GenerateAnswersV2()

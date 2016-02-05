@@ -30,8 +30,9 @@ int Solution::BasicCheck()
 	}
 	return 0;
 }
-void Solution::InitSave(std::string file_name)
+void Solution::InitSave(std::string file_name, int number = 0)
 	{
+		this->number = number;
 		this->file_name=file_name;
 		save=true;
 	}
@@ -60,12 +61,14 @@ void Solution::SaveAnswer(std::string M1,std::string M2,Answer idle,int idlec0,i
 {
 	int maint0=0,maint1=0;
 	for(int i=0;i < gap0 ; i++)
-		maint0+=maintance[0][i].length;
+		maint0 += maintance[0][i].length;
 	for(int i=0;i < gap1 ; i++)
-		maint0 += maintance[1][i].length;
+		maint1 += maintance[1][i].length;
 	FILE * file = fopen(file_name.c_str(),"w");
+	fprintf(file,"**** %d ****\n",number);
+	fprintf(file,"%d,%d\n",referenceRate,getRate());
 	fprintf(file,"M1: %s\nM2: %s\n%d;%d\n%d;%d\n%d;%d\n%d;%d\n",M1.c_str(),M2.c_str(),gap0,maint0,gap1,maint1,idlec0,idle.mach[0],idlec1,idle.mach[1]);
-
+	fprintf(file,"*** EOF ***\n",number);
 	fclose(file);
 }
 int Solution::Rate()
@@ -204,7 +207,6 @@ int Solution::Rate()
 					realtime+=(task[answer[j].mach[1]].op[1-task[answer[j].mach[1]].machine]+3)*3/10;
 					*/
 					}
-				if (save) M2 += Print("op",answer[j].mach[1],task[answer[j].mach[1]].machine,start,task[answer[j].mach[1]].op[task[answer[j].mach[1]].machine],realtime,1);
 				while ((gap[1] < gap_amount[1]) && ((maintance[1][gap[1]].start) < machine[1]))
 				{
 					machine[1]+=(task[answer[j].mach[1]].op[1-task[answer[j].mach[1]].machine]+3)*3/10;//wielokrotne
@@ -212,6 +214,7 @@ int Solution::Rate()
 				if (save)	M2 += Print("maint",gap[1],1,maintance[1][gap[1]].start,maintance[1][gap[1]].length,maintance[1][gap[1]].length,1);
 					machine[1] += maintance[1][gap[1]++].length; //liczenie przerw technicznych
 				}
+				if (save) M2 += Print("op",answer[j].mach[1],task[answer[j].mach[1]].machine,start,task[answer[j].mach[1]].op[1 - task[answer[j].mach[1]].machine],realtime,1);
 				time[answer[j].mach[1]].mach[1] = machine[1];//czas konca
 				if ((gap[1] < gap_amount[1]) && (maintance[1][gap[1]].start == machine[1]) && (j != (size -1))) machine[1]+= maintance[1][gap[1]++].length;
 				j++;
@@ -277,20 +280,6 @@ Solution::Solution() : linearRandom(new Random)
 	(*linearRandom).Change(0,size-1);
 
 }
-/*
-   Solution& Solution::operator=(Solution &from)
-   {
-   this->task=from.task;
-   this->size=from.size;
-   this->maintance[0]=from.maintance[0];
-   this->maintance[1]=from.maintance[1];
-   this->gap_amount[0]=from.gap_amount[0];
-   this->gap_amount[1]=from.gap_amount[1];
-   this->answer=from.answer;
-   linearRandom.Change(0,size-1);
-   return *this;
-   }
- */
 Solution::Solution(Task *task,std::vector<Answer> *answer,Maintance * maintance1,Maintance * maintance2,int task_size,int maintance1_size,int maintance2_size) : linearRandom(new Random)
 
 {
@@ -304,13 +293,7 @@ Solution::Solution(Task *task,std::vector<Answer> *answer,Maintance * maintance1
 	(*linearRandom).Change(0,size-1);
 	Rate();
 }
-/*
-   Solution::~Solution()
-   {
-   if (DEBUG) printf("elo from destructor\n");
-   }
- */
- void Solution::Swap()
+void Solution::Swap()
  {
 	 std::vector<Answer> temp;
 	 temp=answer;

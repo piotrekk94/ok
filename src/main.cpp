@@ -16,19 +16,73 @@ int main(int argc,char** argv)
 	int starting_population=100;
 	int survival_amount=100;
 	int change_check_distance=100;
+	int mutation_percent=30;
+	int crossover_percent=70;
+	int mutation_amount=1;
+	int tournament_groupsize=3;
 	Instance inst;
 	int temp;
+	int instancenumber;
+	int sum=0;
+	int sum2=0;
+	int powt=1;
+	int length=0;
+	std::clock_t c_end,c_start;
+	int t=0;
+	bool load=false,save=false,randanswer=false,params=false;
+
+	printf("Zaladowac instancje ? 1 - tak 0 - nie\n");
 	scanf("%d",&temp );
-	bool load=temp;
+	load=temp;
+	if (!load){
+		printf("Parametry instancji ? 1 - recznie 0 - domyslne\n");
+		scanf("%d",&temp );
+		params=temp;
+	}
+	if (params){
+		printf("MaxLength:%d\n",MaxLength);
+		scanf("%d",&MaxLength );
+		printf("MaintanceBreaks:%d\n",MaintanceBreaks);
+		scanf("%d",&MaintanceBreaks );
+		printf("MaintanceBreaksAvgLength:%d\n",MaintanceBreaksAvgLength);
+		scanf("%d",&MaintanceBreaksAvgLength );
+		printf("Tasks:%d\n",Tasks);
+		scanf("%d",&Tasks );
+		printf("TasksAvgLength:%d\n",TasksAvgLength);
+		scanf("%d",&TasksAvgLength );
+		printf("Duration:%d\n",Duration);
+		scanf("%d",&Duration );
+		printf("starting_population:%d\n",starting_population);
+		scanf("%d",&starting_population );
+		printf("survival_amount:%d\n",survival_amount);
+		scanf("%d",&survival_amount );
+		printf("change_check_distance:%d\n",change_check_distance);
+		scanf("%d",&change_check_distance );
+		printf("mutation_percent:%d\n",mutation_percent);
+		scanf("%d",&mutation_percent );
+		printf("crossover_percent:%d\n",crossover_percent);
+		scanf("%d",&crossover_percent );
+		printf("mutation_amount:%d\n",mutation_amount);
+		scanf("%d",&mutation_amount );
+		printf("tournament_groupsize:%d\n",tournament_groupsize);
+		scanf("%d",&tournament_groupsize );
+	}
+	printf("Wygenerowac rozwiazanie losowo? 1 - tak 0 - nie\n");
 	scanf("%d",&temp );
-	bool save=!load;
-	bool randanswer=temp;
+	randanswer=temp;
+	if (!load){
+		printf("Zapisac instancje ? 1 - tak 0 - nie\n");
+		save=temp;
+	}
+	if (load||save){
+		printf("Podaj numer instancji\n");
+		scanf("%d",&temp );
+		instancenumber=temp;
+	}
 	if (randanswer)starting_population=1;
-	int instancenumber=0;
 
-	int mutation_percent;
-	int crossover_percent;
-
+	printf("Ilosc powtorzen:%d\n",powt);
+	scanf("%d",&powt );
 
 	if (load)
 	{
@@ -54,65 +108,19 @@ int main(int argc,char** argv)
 		solutions[0].Save_Instance((so.str()).c_str(),instancenumber);
 	}
 
-	while (j<2)
-	{
-		printf("%d %d\n",j,k );
 
-		int mutation_amount=1;
-		int tournament_groupsize=3;
-		if (!randanswer)
-			{
-				switch (j) {
-					case 0:
-						mutation_percent=k*5;
-						crossover_percent=100-mutation_percent;
-						k++;
-						fprintf(plik, "mutation/crossover,%d,%d,",mutation_percent,crossover_percent );
-						if (k==21)
-						{
-							j++;
-							k=1;
-						}
-						break;
-					case 1:
-						mutation_amount=k;
-						mutation_percent=30;
-						crossover_percent=70;
-						k++;
-						fprintf(plik, "mutation_amount,%d,",mutation_amount );
-						if (k==5)
-						{
-							j++;
-							k=1;
-						}
-						break;
-				}
-			}
-		else
-		{
-			j=2;
-			change_check_distance=0;
-		}
-		int sum=0;
-		int sum2=0;
-		int powt=1;
-		int length=0;
-		std::clock_t c_end,c_start;
-		int t=0;
-		for(int i=0;i<powt;i++)
-		{
-			int prev_mp,prev_cp;
-			Work job(starting_population,survival_amount,mutation_percent,mutation_amount,crossover_percent,tournament_groupsize,change_check_distance,randanswer);
-			c_start=std::clock();
-			job.Start(solutions,Duration);
-			c_end=std::clock();
-			sum+=job.minhistory[0]-job.minhistory[job.minhistory.size()-1];
-			sum2+=job.minhistory[0];
-			length+=job.minhistory.size();
-			t+=1000*(c_end-c_start)/CLOCKS_PER_SEC;
-		}
-		fprintf(plik,"%d,%d,%d\n",100*sum/sum2,length/powt,t/powt);
+	for(int i=0;i<powt;i++)
+	{
+		Work job(starting_population,survival_amount,mutation_percent,mutation_amount,crossover_percent,tournament_groupsize,change_check_distance,randanswer);
+		c_start=std::clock();
+		job.Start(solutions,Duration);
+		c_end=std::clock();
+		sum+=job.minhistory[0]-job.minhistory[job.minhistory.size()-1];
+		sum2+=job.minhistory[0];
+		length+=job.minhistory.size();
+		t+=1000*(c_end-c_start)/CLOCKS_PER_SEC;
 	}
+	fprintf(plik,"%d,%d,%d\n",100*sum/sum2,length/powt,t/powt);
 	fclose(plik);
-		return 0;
+	return 0;
 }

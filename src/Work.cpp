@@ -51,6 +51,7 @@ void Work::MainLoop(int Duration)
     std::clock_t c_end,c_start,c_temp;
     int prev_mp,prev_cp;
     c_end=c_start=std::clock();
+    bool stagnation=false;
     while(1000 * (c_end-c_start) / CLOCKS_PER_SEC<Duration)
     {
         if (!randanswer)
@@ -58,16 +59,17 @@ void Work::MainLoop(int Duration)
           Mutations();
           Crossingover();
           Tournament();
+          int min=0;
+          for (int i=0;i<solutions.size();i++)
+            min = solutions[i].getRate() < solutions[min].getRate() ? i : min;
+          minhistory.push_back(solutions[min].getRate());
         }
         else
         {
           std::random_shuffle(solutions[0].answer.begin(),solutions[0].answer.end());
+          minhistory.push_back(solutions[0].getRate());
+          printf("%d\n", solutions[0].getRate());
         }
-        bool stagnation=false;
-        int min=0;
-        for (int i=0;i<solutions.size();i++)
-          min = solutions[i].getRate() < solutions[min].getRate() ? i : min;
-        minhistory.push_back(solutions[min].getRate());
         c_end = std::clock();
         if(!randanswer)
         {
@@ -83,6 +85,7 @@ void Work::MainLoop(int Duration)
           {
             mutation_percent=prev_mp;
             crossover_percent=prev_cp;
+            stagnation=false;
           }
           if (NoChanges(change_check_distance))break;
         }

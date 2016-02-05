@@ -62,7 +62,7 @@ void Solution::SaveAnswer(std::string M1,std::string M2,Answer idle,int idlec0,i
 	for(int i=0;i < gap0 ; i++)
 		maint0+=maintance[0][i].length;
 	for(int i=0;i < gap1 ; i++)
-		maint0+=maintance[1][i].length;
+		maint0 += maintance[1][i].length;
 	FILE * file = fopen(file_name.c_str(),"w");
 	fprintf(file,"M1: %s\nM2: %s\n%d;%d\n%d;%d\n%d;%d\n%d;%d\n",M1.c_str(),M2.c_str(),gap0,maint0,gap1,maint1,idlec0,idle.mach[0],idlec1,idle.mach[1]);
 
@@ -71,14 +71,14 @@ void Solution::SaveAnswer(std::string M1,std::string M2,Answer idle,int idlec0,i
 int Solution::Rate()
 {
 	Answer time[size];
-	int machine[2]={0,0};
-	int mach_wait[2]={0,0};
-	int gap[2]={0,0};
+	int machine[2] = {0,0};
+	int mach_wait[2] = {0,0};
+	int gap[2] = {0,0};
 	int op1;
-	Answer idle_time={0};
+	Answer idle_time = {0};
 	int realtime,start;
 	std::string M1,M2;
-	int idle,M1IdleCounter=0,M2IdleCounter=0;
+	int idle,M1IdleCounter = 0, M2IdleCounter = 0;
 	for(int i=0; i<size ; i++)
 	{
 		time[i].mach[0] = 0;

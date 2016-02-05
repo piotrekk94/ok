@@ -16,10 +16,8 @@ class Solution
 		int gap_amount[2];
 		int getRate();//odwołuje się do zapisane wartości
 		void InitSave(std::string file_name);
-
 		int Rate();//zapisuje wartość w rate
 		void Swap();
-	//	Solution& operator=(Solution &from);
 		void MultiMutate(int machine,int MutationAmount);
 		Solution* Tournament(Solution *solution_table, int amount);//chyba lepiej bedzie to zrobic poza klasa
 		int BasicCheck();

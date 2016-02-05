@@ -1,17 +1,6 @@
 #include "Work.hpp"
 
-Work::Work()
-{
-  Load ld("dane.txt");
-  starting_population=ld.file_data.starting_population;
-  survival_amount=ld.file_data.survival_amount;
-  mutation_percent=ld.file_data.mutation_percent;
-  //mutation_amount=ld.file_data.mutation_amount;
-  crossover_percent=ld.file_data.crossover_percent;
-  //tournament_groupsize=ld.file_data.tournament_groupsize;
-}
-
-Work::Work(int starting_population,int survival_amount,int mutation_percent,int mutation_amount,int crossover_percent,int tournament_groupsize,int change_check_distance,bool randanswer)
+Work::Work(int starting_population,int survival_amount,int mutation_percent,int mutation_amount,int crossover_percent,int tournament_groupsize,int change_check_distance,bool randanswer,bool roulette)
 {
   this->starting_population=starting_population;
   this->survival_amount=survival_amount;
@@ -21,6 +10,7 @@ Work::Work(int starting_population,int survival_amount,int mutation_percent,int 
   this->tournament_groupsize=tournament_groupsize;
   this->change_check_distance=change_check_distance;
   this->randanswer=randanswer;
+  this->roulette=roulette;
 }
 
 void Work::Start(std::vector<Solution> s,int Duration)
@@ -59,7 +49,8 @@ void Work::MainLoop(int Duration)
           Mutations();
           Crossingover();
           Tournament();
-          //Roulette();
+          if (roulette) Roulette();
+          else Tournament();
           int min=0;
           for (int i=0;i<solutions.size();i++)
             min = solutions[i].getRate() < solutions[min].getRate() ? i : min;

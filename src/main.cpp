@@ -29,7 +29,7 @@ int main(int argc,char** argv)
 	int length=0;
 	std::clock_t c_end,c_start;
 	int t=0;
-	bool load=false,save=false,randanswer=false,params=false;
+	bool roulette=false,load=false,save=false,randanswer=false,params=false;
 
 	printf("Zaladowac instancje ? 1 - tak 0 - nie\n");
 	scanf("%d",&temp );
@@ -81,6 +81,10 @@ int main(int argc,char** argv)
 	}
 	if (randanswer)starting_population=1;
 
+	printf("Sposob selekcji 1 - ruletka 0 - turniej \n");
+	scanf("%d",&temp );
+	roulette=temp;
+
 	printf("Ilosc powtorzen:%d\n",powt);
 	scanf("%d",&powt );
 
@@ -111,7 +115,7 @@ int main(int argc,char** argv)
 
 	for(int i=0;i<powt;i++)
 	{
-		Work job(starting_population,survival_amount,mutation_percent,mutation_amount,crossover_percent,tournament_groupsize,change_check_distance,randanswer);
+		Work job(starting_population,survival_amount,mutation_percent,mutation_amount,crossover_percent,tournament_groupsize,change_check_distance,randanswer,roulette);
 		c_start=std::clock();
 		job.Start(solutions,Duration);
 		c_end=std::clock();

@@ -10,8 +10,7 @@
 class Work
 {
 public:
-    Work();
-    Work(int starting_population,int survival_amount,int mutation_percent,int mutation_amount,int crossover_percent,int tournament_groupsize,int change_check_distance,bool randanswer);
+    Work(int starting_population,int survival_amount,int mutation_percent,int mutation_amount,int crossover_percent,int tournament_groupsize,int change_check_distance,bool randanswer,bool roulette);
     void Start(int MaxLength,int MaintanceBreaks,int MaintanceBreaksAvgLength,int Tasks,int TasksAvgLength,int Duration);
     void Start(std::vector<Solution> s,int Duration);
     std::vector<int> minhistory;
@@ -31,5 +30,5 @@ private:
     int crossover_percent;
     int tournament_groupsize;
     int change_check_distance;
-    bool randanswer;
+    bool randanswer,roulette;
 };

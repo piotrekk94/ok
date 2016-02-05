@@ -83,7 +83,8 @@ void Work::MainLoop(int Duration)
             solutions[0].answer[i].mach[0]=tab[0][i];
             solutions[0].answer[i].mach[1]=tab[1][i];
           }
-          minhistory.push_back(solutions[0].getRate());
+          solutions[0].Rate();
+          if (solutions[0].getRate()<minhistory.back())minhistory.push_back(solutions[0].getRate());
           printf("%d\n", solutions[0].getRate());
         }
         c_end = std::clock();

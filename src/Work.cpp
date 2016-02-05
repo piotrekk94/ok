@@ -59,6 +59,7 @@ void Work::MainLoop(int Duration)
           Mutations();
           Crossingover();
           Tournament();
+          //Roulette();
           int min=0;
           for (int i=0;i<solutions.size();i++)
             min = solutions[i].getRate() < solutions[min].getRate() ? i : min;
@@ -109,6 +110,24 @@ void Work::MainLoop(int Duration)
     c_temp=std::clock()-c_start;
     printf("%d,%d,%d,%d\n",minhistory[0],minhistory[minhistory.size()-1],minhistory.size(),1000*c_temp/CLOCKS_PER_SEC );
 }
+
+void Work::Roulette()
+{
+  int i,psum=0;
+  for (i=0;i<solutions.size();i++)
+    psum+=solutions[i].getRate();
+  Random rand(0,psum);
+  while(solutions.size()>survival_amount){
+    int p=rand.Rand();
+    for (i=0;i<solutions.size();i++){
+      if (p<=0)break;
+      else p-=solutions[i].getRate();
+    }
+    psum-=solutions[i].getRate();
+    solutions.erase(solutions.begin()+i);
+  }
+}
+
 void Work::Tournament()
 {
     std::vector<std::vector<int>> groups;

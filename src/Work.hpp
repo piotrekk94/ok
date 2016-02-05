@@ -18,6 +18,7 @@ public:
 private:
     void MainLoop(int Duration);
     void Tournament();
+    void Roulette();
     void Mutations();
     void Crossingover();
     void Generate(int MaxLength,int MaintanceBreaks,int MaintanceBreaksAvgLength,int Tasks,int TasksAvgLength,int Duration);

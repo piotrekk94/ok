@@ -12,10 +12,10 @@ int main(int argc,char** argv)
 	std::clock_t c_end,c_start;
 
 	//////////////////////////////
-	int MaxLength=15000;
+	int MaxLength=3500;
 	int MaintanceBreaks=100;
-	int MaintanceBreaksAvgLength=50;
-	int Tasks=200;
+	int MaintanceBreaksAvgLength=10;
+	int Tasks=50;
 	int TasksAvgLength=50;
 	int starting_population=100;
 	int Duration=50000;
@@ -205,6 +205,7 @@ int main(int argc,char** argv)
 				vsolutions[i][max].referenceRate=job.minhistory.back();
 				vsolutions[i][max].InitSave(so.str(),instancenumber);
 				vsolutions[i][max].Rate();
+				vsolutions[i][max].deactiveSave();
 			}
 		}
 		fprintf(plik,"%d,%d\n",100*sum/sum2,length/powt);

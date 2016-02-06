@@ -30,6 +30,10 @@ int Solution::BasicCheck()
 	}
 	return 0;
 }
+void Solution::deactiveSave()
+{
+	save = false;
+}
 void Solution::InitSave(std::string file_name, int number = 0)
 	{
 		this->number = number;

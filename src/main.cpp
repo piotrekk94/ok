@@ -8,10 +8,10 @@ int main(int argc,char** argv)
 	FILE* plik;
 	plik=fopen("test.csv","w");
 	//////////////////////////////
-	int MaxLength=15000;
+	int MaxLength=3500;
 	int MaintanceBreaks=100;
-	int MaintanceBreaksAvgLength=100;
-	int Tasks=200;
+	int MaintanceBreaksAvgLength=10;
+	int Tasks=50;
 	int TasksAvgLength=50;
 	int starting_population=100;
 	int Duration=50000;
@@ -260,6 +260,7 @@ int main(int argc,char** argv)
 					else so<<"o"<<instancenumber<<".txt";
 					vsolutions[i][max].referenceRate=job.minhistory.back();
 					vsolutions[i][max].InitSave(so.str(),instancenumber);
+					vsolutions[i][max].deactiveSave();
 					vsolutions[i][max].Rate();
 				}
 			}

@@ -18,6 +18,7 @@ class Solution
 		int gap_amount[2];
 		int getRate();//odwołuje się do zapisane wartości
 		void InitSave(std::string file_name, int number);
+		void deactiveSave();
 		int Rate();//zapisuje wartość w rate
 		void Swap();
 		void MultiMutate(int machine,int MutationAmount);

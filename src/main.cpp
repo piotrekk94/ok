@@ -260,8 +260,8 @@ int main(int argc,char** argv)
 					else so<<"o"<<instancenumber<<".txt";
 					vsolutions[i][max].referenceRate=job.minhistory.back();
 					vsolutions[i][max].InitSave(so.str(),instancenumber);
-					vsolutions[i][max].deactiveSave();
 					vsolutions[i][max].Rate();
+					vsolutions[i][max].deactiveSave();
 				}
 			}
 			fprintf(plik,"%d,%d\n",100*sum/sum2,length/powt);

@@ -68,7 +68,7 @@ void Solution::SaveAnswer(std::string M1,std::string M2,Answer idle,int idlec0,i
 	fprintf(file,"**** %d ****\n",number);
 	fprintf(file,"%d,%d\n",referenceRate,getRate());
 	fprintf(file,"M1: %s\nM2: %s\n%d;%d\n%d;%d\n%d;%d\n%d;%d\n",M1.c_str(),M2.c_str(),gap0,maint0,gap1,maint1,idlec0,idle.mach[0],idlec1,idle.mach[1]);
-	fprintf(file,"*** EOF ***\n",number);
+	fprintf(file,"*** EOF ***");
 	fclose(file);
 }
 int Solution::Rate()

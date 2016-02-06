@@ -48,7 +48,6 @@ void Work::MainLoop(int Duration)
         {
           Mutations();
           Crossingover();
-          Tournament();
           if (roulette) Roulette();
           else Tournament();
           int min=0;

@@ -8,10 +8,10 @@ int main(int argc,char** argv)
 	FILE* plik;
 	plik=fopen("test.csv","w");
 	//////////////////////////////
-	int MaxLength=25000;
-	int MaintanceBreaks=250;
-	int MaintanceBreaksAvgLength=5;
-	int Tasks=500;
+	int MaxLength=15000;
+	int MaintanceBreaks=100;
+	int MaintanceBreaksAvgLength=100;
+	int Tasks=200;
 	int TasksAvgLength=50;
 	int starting_population=100;
 	int Duration=50000;
@@ -32,7 +32,7 @@ int main(int argc,char** argv)
 	int length=0;
 	std::clock_t c_end,c_start;
 	int t=0;
-	bool roulette=false,load=false,save=false,randanswer=false,params=false,savebest=false,autotest=false;
+	bool tuning=false,roulette=false,load=false,save=false,randanswer=false,params=false,savebest=false,autotest=false;
 
 	printf("Przeprowadzic wszystkie testy automatycznie ? 1 - tak 0 - nie\n");
 	scanf("%d",&temp );
@@ -80,6 +80,7 @@ int main(int argc,char** argv)
 		randanswer=temp;
 		if (!load){
 			printf("Zapisac instancje ? 1 - tak 0 - nie\n");
+			scanf("%d",&temp );
 			save=temp;
 		}
 		printf("Zapisac najlepsze rozwiazanie ? 1 - tak 0 - nie\n");
@@ -90,11 +91,15 @@ int main(int argc,char** argv)
 			scanf("%d",&temp );
 			instancenumber=temp;
 		}
+		printf("Strojenie ? 1 - tak 0 - nie\n");
+		scanf("%d",&temp );
+		tuning=temp;
 	}
 	else {
 		save=true;
 		savebest=true;
 		load=false;
+		tuning=false;
 	}
 	if (randanswer){
 		starting_population=1;
@@ -107,52 +112,51 @@ int main(int argc,char** argv)
 
 	//printf("Ilosc powtorzen:%d\n",powt);
 	//scanf("%d",&powt );
-
 	if (!autotest)powt=1;
 	while(l<6){
-		if (autotest){
+		if (!autotest) l=6;
+		else {
 			switch (l) {
 				case 0:
-					MaintanceBreaks=250;
-					MaintanceBreaksAvgLength=50;
-					Tasks=500;
-					TasksAvgLength=25;
+					MaintanceBreaks=100;
+					MaintanceBreaksAvgLength=100;
+					Tasks=200;
+					TasksAvgLength=50;
 					break;
 				case 1:
-					MaintanceBreaks=250;
-					MaintanceBreaksAvgLength=50;
+					MaintanceBreaks=100;
+					MaintanceBreaksAvgLength=100;
 					Tasks=50;
-					TasksAvgLength=250;
+					TasksAvgLength=200;
 					break;
 				case 2:
-					MaintanceBreaks=250;
-					MaintanceBreaksAvgLength=5;
-					Tasks=500;
+					MaintanceBreaks=100;
+					MaintanceBreaksAvgLength=100;
+					Tasks=200;
 					TasksAvgLength=50;
 					break;
 				case 3:
-					MaintanceBreaks=250;
-					MaintanceBreaksAvgLength=5;
-					Tasks=500;
+					MaintanceBreaks=100;
+					MaintanceBreaksAvgLength=100;
+					Tasks=200;
 					TasksAvgLength=50;
 					break;
 				case 4:
-					MaintanceBreaks=250;
-					MaintanceBreaksAvgLength=5;
-					Tasks=500;
+					MaintanceBreaks=100;
+					MaintanceBreaksAvgLength=100;
+					Tasks=200;
 					TasksAvgLength=50;
 					break;
 				case 5:
-					MaintanceBreaks=250;
-					MaintanceBreaksAvgLength=5;
-					Tasks=500;
+					MaintanceBreaks=100;
+					MaintanceBreaksAvgLength=100;
+					Tasks=200;
 					TasksAvgLength=50;
 					break;
 			}
 			fprintf(plik,"%d,%d\n",l,k);
 			l++;
 		}
-		else l=6;
 		if (load)
 		{
 			Solution temp;
@@ -177,6 +181,11 @@ int main(int argc,char** argv)
 				std::vector<Solution> solutions=gen.GenerateSolution();
 				vsolutions.push_back(solutions);
 		}
+		else {
+			Generator gen(MaxLength,MaintanceBreaks,MaintanceBreaksAvgLength,Tasks,TasksAvgLength,starting_population);
+			std::vector<Solution> solutions=gen.GenerateSolution();
+			vsolutions.push_back(solutions);
+		}
 		if (save)
 		{
 			if (autotest)
@@ -191,8 +200,9 @@ int main(int argc,char** argv)
 				vsolutions[0][0].Save_Instance((so.str()).c_str(),instancenumber);
 			}
 		}
+		j=0;
 		while(j<5){
-			if (autotest){
+			if (tuning){
 				switch (j) {
 					case 0:
 						survival_amount=k*10;
@@ -211,17 +221,25 @@ int main(int argc,char** argv)
 						tournament_groupsize=k;
 						break;
 				}
-				fprintf(plik,"%d,%d,%d\n",l,j,k);
-				printf("%d,%d,%d\n",l,j,k);
+				fprintf(plik,"%d,%d\n",j,k-1);
+				printf("%d,%d\n",j,k-1);
 				k++;
 				if (k==21){
 					j++;
 					k=1;
+					survival_amount=100;
+					change_check_distance=100;
+					mutation_percent=30;
+					crossover_percent=70;
+					mutation_amount=1;
+					tournament_groupsize=3;
 				}
 			}
 			else j=5;
+
 			for(int i=0;i<powt;i++)
 			{
+				if (autotest)printf("%d %d\n",l-1,i);
 				Work job(starting_population,survival_amount,mutation_percent,mutation_amount,crossover_percent,tournament_groupsize,change_check_distance,randanswer,roulette);
 				c_start=std::clock();
 				job.Start(vsolutions[i],Duration);
@@ -232,16 +250,16 @@ int main(int argc,char** argv)
 				t+=1000*(c_end-c_start)/CLOCKS_PER_SEC;
 				if (savebest){
 					int max=0;
-					for (int l=0;l<vsolutions[i].size();l++)
-						max = vsolutions[i][l].getRate() < vsolutions[i][max].getRate() ? l : max;
+					for (int h=0;h<vsolutions[i].size();h++)
+						max = vsolutions[i][h].getRate() < vsolutions[i][max].getRate() ? h : max;
 					std::stringstream so;
 					if (autotest){
-						so<<"o"<<(l-1)<<i<<j<<k-1<<".txt";
-						instancenumber=(l-1)*1000+i*100+j*10+k-1;
+						so<<"o"<<(l-1)<<i<<".txt";
+						instancenumber=(l-1)*10+i;
 					}
 					else so<<"o"<<instancenumber<<".txt";
+					vsolutions[i][max].referenceRate=job.minhistory.back();
 					vsolutions[i][max].InitSave(so.str(),instancenumber);
-					vsolutions[i][max].referenceRate=job.minhistory[0];
 					vsolutions[i][max].Rate();
 				}
 			}

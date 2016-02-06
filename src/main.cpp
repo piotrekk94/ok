@@ -118,20 +118,20 @@ int main(int argc,char** argv)
 		else {
 			switch (l) {
 				case 0:
-					MaintanceBreaks=100;
+					MaintanceBreaks=50;
 					MaintanceBreaksAvgLength=100;
 					Tasks=200;
 					TasksAvgLength=50;
 					break;
 				case 1:
-					MaintanceBreaks=100;
+					MaintanceBreaks=50;
 					MaintanceBreaksAvgLength=100;
-					Tasks=50;
-					TasksAvgLength=200;
+					Tasks=25;
+					TasksAvgLength=400;
 					break;
 				case 2:
-					MaintanceBreaks=100;
-					MaintanceBreaksAvgLength=100;
+					MaintanceBreaks=1000;
+					MaintanceBreaksAvgLength=10;
 					Tasks=200;
 					TasksAvgLength=50;
 					break;
@@ -154,7 +154,6 @@ int main(int argc,char** argv)
 					TasksAvgLength=50;
 					break;
 			}
-			fprintf(plik,"%d,%d\n",l,k);
 			l++;
 		}
 		if (load)
@@ -239,6 +238,7 @@ int main(int argc,char** argv)
 
 			for(int i=0;i<powt;i++)
 			{
+				sum=sum2=0;
 				if (autotest)printf("%d %d\n",l-1,i);
 				Work job(starting_population,survival_amount,mutation_percent,mutation_amount,crossover_percent,tournament_groupsize,change_check_distance,randanswer,roulette);
 				c_start=std::clock();
@@ -263,7 +263,7 @@ int main(int argc,char** argv)
 					vsolutions[i][max].Rate();
 				}
 			}
-			fprintf(plik,"%d,%d,%d\n",100*sum/sum2,length/powt,t/powt);
+			fprintf(plik,"%d,%d\n",100*sum/sum2,length/powt);
 		}
 	}
 	fclose(plik);

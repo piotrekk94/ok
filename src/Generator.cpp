@@ -17,13 +17,13 @@ Generator::Generator(int MaxLength,int MaintanceBreaks,int MaintanceBreaksAvgLen
 
 void Generator::ReplaceBreaks(Instance i)
 {
-    maintance=i.maintance;
-	this->maint[1]=&(maintance.front());
+    vmaintance=i.maintance;
+	this->maint[1]=&(vmaintance.front());
 }
 void Generator::ReplaceTasks(Instance i)
 {
-    task=i.task;
-	this->task=&(task.front());
+    vtask=i.task;
+	this->task=&(vtask.front());
 }
 
 void Generator::GenerateInstance()

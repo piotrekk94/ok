@@ -34,6 +34,7 @@ int main(int argc,char** argv)
 
 	bool roulette=false,load=false,save=false,randanswer=false,params=false,savebest=false,autotest=false;
 	for (int n=0;n<10;n++){
+        vsolutions.clear();
 		switch (n) {
 			case 0:
 			MaxLength=3500;

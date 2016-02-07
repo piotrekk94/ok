@@ -69,11 +69,15 @@ void Solution::SaveAnswer(std::string M1,std::string M2,Answer idle,int idlec0,i
 	for(int i=0;i < gap1 ; i++)
 		maint1 += maintance[1][i].length;
 	FILE * file = fopen(file_name.c_str(),"w");
-	fprintf(file,"**** %d ****\n",number);
-	fprintf(file,"%d,%d\n",referenceRate,getRate());
-	fprintf(file,"M1: %s\nM2: %s\n%d;%d\n%d;%d\n%d;%d\n%d;%d\n",M1.c_str(),M2.c_str(),gap0,maint0,gap1,maint1,idlec0,idle.mach[0],idlec1,idle.mach[1]);
-	fprintf(file,"*** EOF ***");
-	fclose(file);
+	if (file == nullptr) perror("Solution::SaveAnswer: ");
+	else
+	{
+		fprintf(file,"**** %d ****\n",number);
+		fprintf(file,"%d,%d\n",referenceRate,getRate());
+		fprintf(file,"M1: %s\nM2: %s\n%d;%d\n%d;%d\n%d;%d\n%d;%d\n",M1.c_str(),M2.c_str(),gap0,maint0,gap1,maint1,idlec0,idle.mach[0],idlec1,idle.mach[1]);
+		fprintf(file,"*** EOF ***");
+		fclose(file);
+	}
 }
 int Solution::Rate()
 {
@@ -135,27 +139,27 @@ int Solution::Rate()
 					machine[0] = time[answer[i].mach[0]].mach[1];//czekamy
 					idle_time.mach[0]+=idle;
 					while ((gap[0] < gap_amount[0]) && ((maintance[0][gap[0]].start) <= machine[0]))
-						{//trzeba je wypisac
-							if (save) M1 += Print("maint",gap[0],1,maintance[0][gap[0]].start,maintance[0][gap[0]].length,maintance[0][gap[0]].length,0);
-							gap[0]++;//pomijamy te przerwy ktore minely gdzy czekalismy
-							if ((gap[0] < gap_amount[0]) && ((maintance[0][gap[0]].start) <= machine[0]))
-								{
-									idle = maintance[0][gap[0]].start - maintance[0][gap[0]-1].end();
-									if (save) M1 += Print("idle",M1IdleCounter++,1,maintance[0][gap[0]-1].end(),idle,idle,0);
-									idle_time.mach[0]+=idle;
-								}
+					{//trzeba je wypisac
+						if (save) M1 += Print("maint",gap[0],1,maintance[0][gap[0]].start,maintance[0][gap[0]].length,maintance[0][gap[0]].length,0);
+						gap[0]++;//pomijamy te przerwy ktore minely gdzy czekalismy
+						if ((gap[0] < gap_amount[0]) && ((maintance[0][gap[0]].start) <= machine[0]))
+						{
+							idle = maintance[0][gap[0]].start - maintance[0][gap[0]-1].end();
+							if (save) M1 += Print("idle",M1IdleCounter++,1,maintance[0][gap[0]-1].end(),idle,idle,0);
+							idle_time.mach[0]+=idle;
 						}
+					}
 					if ((gap[0] > 0) && (maintance[0][gap[0]-1].end() > machine[0])) machine[0] = maintance[0][gap[0]-1].end();//moglibysmy zaczac gdyby nie przerwa techniczna
 				}
 				start=machine[0];
 				machine[0] += task[answer[i].mach[0]].op[task[answer[i].mach[0]].machine]; //op1 czy op2
 				realtime = task[answer[i].mach[0]].op[task[answer[i].mach[0]].machine]; //op1 czy op2
 				if ((gap[0] < gap_amount[0]) && ((maintance[0][gap[0]].start) < machine[0]))
-					{
+				{
 					machine[0]+=(task[answer[i].mach[0]].op[task[answer[i].mach[0]].machine]+3)*3/10;//kara za przerwanie zadania
 					realtime += (task[answer[i].mach[0]].op[task[answer[i].mach[0]].machine]+3)*3/10;
-					}
-			if (save)	M1 += Print("op",answer[i].mach[0],task[answer[i].mach[0]].machine,start,task[answer[i].mach[0]].op[task[answer[i].mach[0]].machine],realtime,0);
+				}
+				if (save)	M1 += Print("op",answer[i].mach[0],task[answer[i].mach[0]].machine,start,task[answer[i].mach[0]].op[task[answer[i].mach[0]].machine],realtime,0);
 				while ((gap[0] < gap_amount[0]) && ((maintance[0][gap[0]].start) < machine[0]))
 				{
 					machine[0] += maintance[0][gap[0]++].length;  //liczenie przerw technicznych
@@ -163,10 +167,10 @@ int Solution::Rate()
 				}
 				time[answer[i].mach[0]].mach[0] = machine[0];//czas konca
 				if ((gap[0] < gap_amount[0]) && (maintance[0][gap[0]].start == machine[0]) && (i != (size-1)))
-					{
-			if (save)		M1 += Print("maint",gap[0],1,maintance[0][gap[0]].start,maintance[0][gap[0]].length,maintance[0][gap[0]].length,0);
+				{
+					if (save)		M1 += Print("maint",gap[0],1,maintance[0][gap[0]].start,maintance[0][gap[0]].length,maintance[0][gap[0]].length,0);
 					machine[0]+= maintance[0][gap[0]++].length;
-					}
+				}
 				i++;
 				mach_wait[0] = 0;
 				if (DEBUG) printf("Solution::Rate próba zliczenia czasu na machine[0] zakończona\n");
@@ -186,18 +190,18 @@ int Solution::Rate()
 					machine[1] = time[answer[j].mach[1]].mach[0];
 					idle_time.mach[1]+=idle;
 					while ((gap[1] < gap_amount[1]) && ((maintance[1][gap[1]].start) <= machine[1]))
+					{
+						if (save) M2 += Print("maint",gap[1],1,maintance[1][gap[1]].start,maintance[1][gap[1]].length,maintance[1][gap[1]].length,1);
+						gap[1]++;//pomijamy te przerwy ktore minely gdzy czekalismy
+						if ((gap[1] < gap_amount[1]) && ((maintance[1][gap[1]].start) <= machine[1]))
 						{
-							if (save) M2 += Print("maint",gap[1],1,maintance[1][gap[1]].start,maintance[1][gap[1]].length,maintance[1][gap[1]].length,1);
-							gap[1]++;//pomijamy te przerwy ktore minely gdzy czekalismy
-							if ((gap[1] < gap_amount[1]) && ((maintance[1][gap[1]].start) <= machine[1]))
-								{
-								idle =maintance[1][gap[1]].start - maintance[1][gap[1]-1].end();
-								if (save) M2 += Print("idle",M2IdleCounter++,1,maintance[1][gap[1]-1].end(),idle,idle,1);
+							idle =maintance[1][gap[1]].start - maintance[1][gap[1]-1].end();
+							if (save) M2 += Print("idle",M2IdleCounter++,1,maintance[1][gap[1]-1].end(),idle,idle,1);
 
-								idle_time.mach[1]+=idle;
-								}
-
+							idle_time.mach[1]+=idle;
 						}
+
+					}
 					if ((gap[1] > 0) && (maintance[1][gap[1]-1].end() > machine[1])) machine[1] = maintance[1][gap[1]-1].end();//moglibysmy zaczac gdyby nie przerwa techniczna
 				}
 				start=machine[1];
@@ -205,18 +209,18 @@ int Solution::Rate()
 				realtime= task[answer[j].mach[1]].op[1-task[answer[j].mach[1]].machine];
 				//liczenie przerw technicznych
 				if ((gap[1] < gap_amount[1]) && ((maintance[1][gap[1]].start) < machine[1]))//kara za przerwanie zadania jednokrotna
-					{
+				{
 					/*
-					machine[1]+=(task[answer[j].mach[1]].op[1-task[answer[j].mach[1]].machine]+3)*3/10;
-					realtime+=(task[answer[j].mach[1]].op[1-task[answer[j].mach[1]].machine]+3)*3/10;
-					*/
-					}
+					   machine[1]+=(task[answer[j].mach[1]].op[1-task[answer[j].mach[1]].machine]+3)*3/10;
+					   realtime+=(task[answer[j].mach[1]].op[1-task[answer[j].mach[1]].machine]+3)*3/10;
+					 */
+				}
 				std::string temp;
 				while ((gap[1] < gap_amount[1]) && ((maintance[1][gap[1]].start) < machine[1]))
 				{
 					machine[1]+=(task[answer[j].mach[1]].op[1-task[answer[j].mach[1]].machine]+3)*3/10;//wielokrotne
 					realtime+=(task[answer[j].mach[1]].op[1-task[answer[j].mach[1]].machine]+3)*3/10;
-				if (save) temp += Print("maint",gap[1],1,maintance[1][gap[1]].start,maintance[1][gap[1]].length,maintance[1][gap[1]].length,1);
+					if (save) temp += Print("maint",gap[1],1,maintance[1][gap[1]].start,maintance[1][gap[1]].length,maintance[1][gap[1]].length,1);
 					machine[1] += maintance[1][gap[1]++].length; //liczenie przerw technicznych
 				}
 				if (save) M2 += Print("op",answer[j].mach[1],task[answer[j].mach[1]].machine,start,task[answer[j].mach[1]].op[1 - task[answer[j].mach[1]].machine],realtime,1);
@@ -300,15 +304,15 @@ Solution::Solution(Task *task,std::vector<Answer> *answer,Maintance * maintance1
 	Rate();
 }
 void Solution::Swap()
- {
-	 std::vector<Answer> temp;
-	 temp=answer;
-	 for(int i=0;i<answer.size();i++)
-	 {
-		 answer[i].mach[0]=temp[i].mach[1];
-		 answer[i].mach[1]=temp[i].mach[0];
-	 }
- }
+{
+	std::vector<Answer> temp;
+	temp=answer;
+	for(int i=0;i<answer.size();i++)
+	{
+		answer[i].mach[0]=temp[i].mach[1];
+		answer[i].mach[1]=temp[i].mach[0];
+	}
+}
 void Solution::Mutate(int machine)
 {
 	if (DEBUG==2) printf("Solution::Mutate\n");

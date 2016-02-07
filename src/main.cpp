@@ -1,5 +1,3 @@
-#include <stdio.h>
-#include <unistd.h>
 #include <vector>
 #include <string>
 #include <chrono>
@@ -128,55 +126,52 @@ int main(int argc,char** argv)
 			Duration=5000;
 			break;
 		}
-		if (fork()==0){
-			std::stringstream testname;
-			testname<<"test"<<n<<".csv";
-			plik=fopen(testname.str().c_str(),"w");
-			for(int i=0; i < powt ; i++)
-			{
-				Generator gen(MaxLength,MaintanceBreaks,MaintanceBreaksAvgLength,Tasks,TasksAvgLength,starting_population);
-				std::vector<Solution> solutions=gen.GenerateSolution();
-				vsolutions.push_back(solutions);
-				printf("%d\n",i);
-				std::this_thread::sleep_for(std::chrono::nanoseconds(10000000));
-			}
-			for(int k=0; k < 10 ; k++)
-			{
-				mutation_percent = k * 10;
-				if (k == 0)
-				{
-				fprintf(plik,", ");
-				for(int j=0; j < 10 ; j++)
-					fprintf(plik,"%d,",j * 10);
-				fprintf(plik,"\n");
-				}
-				fprintf(plik,"%d",mutation_percent);
-				for(int j=0; j < 10 ; j++)
-				{
-					crossover_percent = j * 10;
-					length = 0;
-					sum = 0;
-					sum2 = 0;
-					t = 0;
-					for(int i=0;i<powt;i++)
-					{
-						printf("starting_population: %d; survival_amount: %d; mutation_percent: %d; crossover_percent: %d;\n",starting_population,survival_amount,mutation_percent,crossover_percent);
-						Work job(starting_population,survival_amount,mutation_percent,mutation_amount,crossover_percent,tournament_groupsize,change_check_distance,randanswer,roulette);
-						c_start=std::clock();
-						job.Start(vsolutions[i],Duration);
-						c_end=std::clock();
-						sum+=job.minhistory[0]-job.minhistory[job.minhistory.size()-1];
-						sum2+=job.minhistory[0];
-						length+=job.minhistory.size();
-						t+=1000*(c_end-c_start)/CLOCKS_PER_SEC;
-					}
-					fprintf(plik,",%d",100*sum/sum2 );
-				}
-				fprintf(plik,"\n");
-			}
-			fclose(plik);
-			return 0;
+		std::stringstream testname;
+		testname<<"test"<<n<<".csv";
+		plik=fopen(testname.str().c_str(),"w");
+		for(int i=0; i < powt ; i++)
+		{
+			Generator gen(MaxLength,MaintanceBreaks,MaintanceBreaksAvgLength,Tasks,TasksAvgLength,starting_population);
+			std::vector<Solution> solutions=gen.GenerateSolution();
+			vsolutions.push_back(solutions);
+			printf("%d\n",i);
+			std::this_thread::sleep_for(std::chrono::nanoseconds(10000000));
 		}
+		for(int k=0; k < 10 ; k++)
+		{
+			mutation_percent = k * 10;
+			if (k == 0)
+			{
+			fprintf(plik,", ");
+			for(int j=0; j < 10 ; j++)
+				fprintf(plik,"%d,",j * 10);
+			fprintf(plik,"\n");
+			}
+			fprintf(plik,"%d",mutation_percent);
+			for(int j=0; j < 10 ; j++)
+			{
+				crossover_percent = j * 10;
+				length = 0;
+				sum = 0;
+				sum2 = 0;
+				t = 0;
+				for(int i=0;i<powt;i++)
+				{
+					printf("starting_population: %d; survival_amount: %d; mutation_percent: %d; crossover_percent: %d;\n",starting_population,survival_amount,mutation_percent,crossover_percent);
+					Work job(starting_population,survival_amount,mutation_percent,mutation_amount,crossover_percent,tournament_groupsize,change_check_distance,randanswer,roulette);
+					c_start=std::clock();
+					job.Start(vsolutions[i],Duration);
+					c_end=std::clock();
+					sum+=job.minhistory[0]-job.minhistory[job.minhistory.size()-1];
+					sum2+=job.minhistory[0];
+					length+=job.minhistory.size();
+					t+=1000*(c_end-c_start)/CLOCKS_PER_SEC;
+				}
+				fprintf(plik,",%d",100*sum/sum2 );
+			}
+			fprintf(plik,"\n");
+		}
+		fclose(plik);
 	}
 	/*
 	printf("Przeprowadzic wszystkie testy automatycznie ? 1 - tak 0 - nie\n");

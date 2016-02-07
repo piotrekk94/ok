@@ -17,21 +17,18 @@ Generator::Generator(int MaxLength,int MaintanceBreaks,int MaintanceBreaksAvgLen
 
 void Generator::ReplaceBreaks(Instance i)
 {
-    vmaintance=i.maintance;
-	this->maint[1]=&(vmaintance.front());
-    for (int j=0;j<i.maintance.size();j++)
-        if (i.maintance[j].start!=maint[1][j].start)
-            printf("ERROR\n");
+    for (int j=0;j<i.maintance.size();j++){
+        this->maint[1][j].length=i.maintance[j].length;
+        this->maint[1][j].start=i.maintance[j].start;
+    }
 }
 void Generator::ReplaceTasks(Instance i)
 {
-    vtask=i.task;
-	this->task=&(vtask.front());
-    for (int j=0;j<i.task.size();j++)
-        if (i.task[j].machine!=task[j].machine)
-            printf("ERROR\n");
-        else if (task[j].machine>1||task[j].machine<0)
-            printf("ERROR\n");
+    for (int j=0;j<i.task.size();j++){
+        this->task->machine=i.task[j].machine;
+        this->task->op[0]=i.task[j].op[0];
+        this->task->op[1]=i.task[j].op[1];
+    }
 }
 
 void Generator::GenerateInstance()

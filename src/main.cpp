@@ -286,6 +286,7 @@ int main(int argc,char** argv)
 					break;
 			}
 		}
+		vsolutions.clear();
 		if (load)
 		{
 			Solution temp;

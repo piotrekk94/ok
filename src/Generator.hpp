@@ -24,6 +24,8 @@ class Generator
 		void GenerateTasks();
 		std::vector<Answer> GenerateAnswers();
 		std::vector<Answer> GenerateAnswersV2();
+        std::vector<Task> task;
+        std::vector<Maintance> maintance;
     void GenerateInstance();
 };
 

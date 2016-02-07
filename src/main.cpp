@@ -33,7 +33,7 @@ int main(int argc,char** argv)
 	std::vector<std::vector<Solution>> vsolutions;
 
 	bool roulette=false,load=false,save=false,randanswer=false,params=false,savebest=false,autotest=false;
-	for (int n=0;n<10;n++){
+	/*for (int n=0;n<10;n++){
         vsolutions.clear();
 		switch (n) {
 			case 0:
@@ -173,8 +173,7 @@ int main(int argc,char** argv)
 			fprintf(plik,"\n");
 		}
 		fclose(plik);
-	}
-	/*
+	}*/
 	printf("Przeprowadzic wszystkie testy automatycznie ? 1 - tak 0 - nie\n");
 	scanf("%d",&temp );
 	autotest=temp;
@@ -238,8 +237,8 @@ int main(int argc,char** argv)
 		load=false;
 	}
 	if (randanswer){
-		starting_population=1;
-		Duration/=10;
+		//starting_population=1;
+		//Duration/=10;
 	}
 	printf("Sposob selekcji 1 - ruletka 0 - turniej \n");
 	scanf("%d",&temp );
@@ -353,6 +352,6 @@ int main(int argc,char** argv)
 		}
 		fprintf(plik,"%d,%d\n",100*sum/sum2,length/powt);
 	}
-	fclose(plik);*/
+	fclose(plik);
 	return 0;
 }

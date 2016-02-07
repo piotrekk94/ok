@@ -1,0 +1,63 @@
+# depslib dependency file v1.0
+1454882526 source:c:\users\piotr\onedrive\dokumenty\github\ok\src\generator.cpp
+	"Generator.hpp"
+
+1454881404 c:\users\piotr\onedrive\dokumenty\github\ok\src\generator.hpp
+	<cstdio>
+	<cstdlib>
+	<algorithm>
+	"Struct.hpp"
+	"Solution.hpp"
+	"Random.hpp"
+	"time.h"
+
+1454874308 c:\users\piotr\onedrive\dokumenty\github\ok\src\struct.hpp
+	<vector>
+
+1454874308 c:\users\piotr\onedrive\dokumenty\github\ok\src\solution.hpp
+	<cstdio>
+	<cstring>
+	<vector>
+	<memory>
+	<sstream>
+	<string>
+	"Struct.hpp"
+	"Random.hpp"
+
+1454874308 c:\users\piotr\onedrive\dokumenty\github\ok\src\random.hpp
+	<random>
+	<memory>
+	<ctime>
+
+1454874308 source:c:\users\piotr\onedrive\dokumenty\github\ok\src\load.cpp
+	"Load.hpp"
+
+1454874308 c:\users\piotr\onedrive\dokumenty\github\ok\src\load.hpp
+	<cstdio>
+	<cstring>
+
+1454874308 source:c:\users\piotr\onedrive\dokumenty\github\ok\src\random.cpp
+	"Random.hpp"
+
+1454874308 source:c:\users\piotr\onedrive\dokumenty\github\ok\src\solution.cpp
+	"Solution.hpp"
+
+1454874308 source:c:\users\piotr\onedrive\dokumenty\github\ok\src\work.cpp
+	"Work.hpp"
+
+1454874308 c:\users\piotr\onedrive\dokumenty\github\ok\src\work.hpp
+	"Solution.hpp"
+	"Generator.hpp"
+	"Load.hpp"
+	"Random.hpp"
+	<cstdio>
+	<cstdlib>
+	<ctime>
+
+1454882833 source:c:\users\piotr\onedrive\dokumenty\github\ok\src\main.cpp
+	<vector>
+	<string>
+	<chrono>
+	<thread>
+	"Work.hpp"
+

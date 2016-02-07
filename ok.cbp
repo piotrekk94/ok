@@ -31,6 +31,18 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="src/Generator.cpp" />
+		<Unit filename="src/Generator.hpp" />
+		<Unit filename="src/Load.cpp" />
+		<Unit filename="src/Load.hpp" />
+		<Unit filename="src/Random.cpp" />
+		<Unit filename="src/Random.hpp" />
+		<Unit filename="src/Solution.cpp" />
+		<Unit filename="src/Solution.hpp" />
+		<Unit filename="src/Struct.hpp" />
+		<Unit filename="src/Work.cpp" />
+		<Unit filename="src/Work.hpp" />
+		<Unit filename="src/main.cpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />

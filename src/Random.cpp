@@ -34,6 +34,7 @@ Random::Random()// :rd(new std::random_device)
 	bool error = false;
 #ifdef _WIN32
 	error = true;
+	printf("windows");
 #endif
 	std::shared_ptr<std::random_device> rd;
 	try

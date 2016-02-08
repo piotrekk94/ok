@@ -31,8 +31,11 @@ Random::~Random()
 Random::Random()// :rd(new std::random_device)
 {
 
-	std::shared_ptr<std::random_device> rd;
 	bool error = false;
+#ifdef _WIN32
+	error = true;
+#endif
+	std::shared_ptr<std::random_device> rd;
 	try
 	{
 	std::shared_ptr<std::random_device> temp2( new std::random_device());

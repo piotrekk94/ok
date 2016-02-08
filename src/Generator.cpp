@@ -1,6 +1,6 @@
 #include "Generator.hpp"
 
-Generator::Generator(int MaxLength,int MaintanceBreaks,int MaintanceBreaksAvgLength,int Tasks,int TasksAvgLength,int Population)
+Generator::Generator(int MaxLength,int MaintanceBreaks,int MaintanceBreaksAvgLength,int Tasks,int TasksAvgLength,int Population,Random* op)
 {
 	this->MaxLength=MaxLength;
 	this->MaintanceBreaks=MaintanceBreaks;
@@ -10,6 +10,7 @@ Generator::Generator(int MaxLength,int MaintanceBreaks,int MaintanceBreaksAvgLen
 	this->task=new Task[Tasks];
 	this->maint[0]=new Maintance[MaintanceBreaks];
 	this->maint[1]=new Maintance[MaintanceBreaks];
+	this->op=op;
   this->Population=Population;
 	srand(time(NULL));
   GenerateInstance();
@@ -38,12 +39,11 @@ void Generator::GenerateInstance()
 }
 void Generator::GenerateTasks()
 {
-	Random op(TasksAvgLength*(1-MAX_DEVIATION_FROM_AVG),TasksAvgLength*(1+MAX_DEVIATION_FROM_AVG),1);
 	for(int i=0;i<Tasks;i++)
 		{
 			task[i].machine=rand()%2;
-			task[i].op[0]=op.Rand();
-			task[i].op[1]=op.Rand();
+			task[i].op[0]=op->Rand();
+			task[i].op[1]=op->Rand();
 		}
 }
 

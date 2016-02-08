@@ -2,6 +2,7 @@
 #include <random>
 #include <memory>
 #include <ctime>
+#include <cstdio>
 /*
 losuje liczby z zadanego przedziału z rozkładem liniowym
 */

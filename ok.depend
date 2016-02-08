@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1454884551 source:c:\users\piotr\onedrive\dokumenty\github\ok\src\generator.cpp
+1454959227 source:c:\users\piotr\onedrive\dokumenty\github\ok\src\generator.cpp
 	"Generator.hpp"
 
 1454884517 c:\users\piotr\onedrive\dokumenty\github\ok\src\generator.hpp
@@ -24,10 +24,11 @@
 	"Struct.hpp"
 	"Random.hpp"
 
-1454874308 c:\users\piotr\onedrive\dokumenty\github\ok\src\random.hpp
+1454959528 c:\users\piotr\onedrive\dokumenty\github\ok\src\random.hpp
 	<random>
 	<memory>
 	<ctime>
+	<cstdio>
 
 1454874308 source:c:\users\piotr\onedrive\dokumenty\github\ok\src\load.cpp
 	"Load.hpp"
@@ -42,7 +43,7 @@
 1454874308 source:c:\users\piotr\onedrive\dokumenty\github\ok\src\solution.cpp
 	"Solution.hpp"
 
-1454874308 source:c:\users\piotr\onedrive\dokumenty\github\ok\src\work.cpp
+1454884212 source:c:\users\piotr\onedrive\dokumenty\github\ok\src\work.cpp
 	"Work.hpp"
 
 1454874308 c:\users\piotr\onedrive\dokumenty\github\ok\src\work.hpp
@@ -54,7 +55,7 @@
 	<cstdlib>
 	<ctime>
 
-1454882833 source:c:\users\piotr\onedrive\dokumenty\github\ok\src\main.cpp
+1454959010 source:c:\users\piotr\onedrive\dokumenty\github\ok\src\main.cpp
 	<vector>
 	<string>
 	<chrono>

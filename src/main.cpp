@@ -31,100 +31,105 @@ int main(int argc,char** argv)
 	//////////////////////////////
 
 	std::vector<std::vector<Solution>> vsolutions;
-    plik=fopen("test.csv","w");
+  //plik=fopen("test.csv","w");
 	bool roulette=false,load=false,save=false,randanswer=false,params=false,savebest=false,autotest=false;
-	/*for (int n=0;n<10;n++){
-        vsolutions.clear();
+
+	for (int n=0;n<10;n++){
+		if (argc==2){
+			n=argv[1][0]-'0';
+			printf("%d\n",n );
+		}
+    vsolutions.clear();
 		switch (n) {
 			case 0:
-			MaxLength=3500;
-			MaintanceBreaks=500;
-			MaintanceBreaksAvgLength=2;
-			Tasks=50;
-			TasksAvgLength=50;
-			starting_population=100;
-			Duration=5000;
-			break;
-			case 1:
-			MaxLength=3500;
-			MaintanceBreaks=500;
-			MaintanceBreaksAvgLength=2;
-			Tasks=25;
-			TasksAvgLength=100;
-			starting_population=100;
-			Duration=5000;
-			break;
-			case 2:
-			MaxLength=3500;
-			MaintanceBreaks=500;
-			MaintanceBreaksAvgLength=2;
-			Tasks=200;
-			TasksAvgLength=12;
-			starting_population=100;
-			Duration=5000;
-			break;
-			case 3:
-			MaxLength=7000;
-			MaintanceBreaks=500;
-			MaintanceBreaksAvgLength=4;
-			Tasks=100;
-			TasksAvgLength=50;
-			starting_population=100;
-			Duration=5000;
-			break;
-			case 4:
-			MaxLength=7000;
-			MaintanceBreaks=500;
-			MaintanceBreaksAvgLength=4;
-			Tasks=50;
-			TasksAvgLength=100;
-			starting_population=100;
-			Duration=5000;
-			break;
-			case 5:
-			MaxLength=3500;
-			MaintanceBreaks=500;
-			MaintanceBreaksAvgLength=2;
-			Tasks=250;
+			MaxLength=1000;
+			MaintanceBreaks=7;
+			MaintanceBreaksAvgLength=40;
+			Tasks=75;
 			TasksAvgLength=10;
 			starting_population=100;
-			Duration=5000;
+			Duration=1000;
+			break;
+			case 1:
+			MaxLength=1000;
+			MaintanceBreaks=37;
+			MaintanceBreaksAvgLength=8;
+			Tasks=75;
+			TasksAvgLength=10;
+			starting_population=100;
+			Duration=1000;
+			break;
+			case 2:
+			MaxLength=1000;
+			MaintanceBreaks=2;
+			MaintanceBreaksAvgLength=100;
+			Tasks=20;
+			TasksAvgLength=40;
+			starting_population=100;
+			Duration=1000;
+			break;
+			case 3:
+			MaxLength=1000;
+			MaintanceBreaks=10;
+			MaintanceBreaksAvgLength=20;
+			Tasks=20;
+			TasksAvgLength=40;
+			starting_population=100;
+			Duration=1000;
+			break;
+			case 4:
+			MaxLength=1000;
+			MaintanceBreaks=100;
+			MaintanceBreaksAvgLength=2;
+			Tasks=200;
+			TasksAvgLength=4;
+			starting_population=100;
+			Duration=1000;
+			break;
+			case 5:
+			MaxLength=1000;
+			MaintanceBreaks=20;
+			MaintanceBreaksAvgLength=10;
+			Tasks=200;
+			TasksAvgLength=4;
+			starting_population=100;
+			Duration=1000;
 			break;
 			case 6:
-			MaxLength=3500;
-			MaintanceBreaks=500;
+			MaxLength=1000;
+			MaintanceBreaks=150;
 			MaintanceBreaksAvgLength=2;
-			Tasks=10;
-			TasksAvgLength=250;
-			starting_population=100;
-			Duration=5000;
-			break;
-			case 7:
-			MaxLength=7000;
-			MaintanceBreaks=2000;
-			MaintanceBreaksAvgLength=1;
-			Tasks=1000;
+			Tasks=150;
 			TasksAvgLength=5;
 			starting_population=100;
-			Duration=5000;
+			Duration=1000;
+			break;
+			case 7:
+			MaxLength=1000;
+			MaintanceBreaks=300;
+			MaintanceBreaksAvgLength=1;
+			Tasks=150;
+			TasksAvgLength=5;
+			starting_population=100;
+			Duration=1000;
 			break;
 			case 8:
-			MaxLength=7000;
-			MaintanceBreaks=2000;
+			MaxLength=1000;
+			MaintanceBreaks=200;
 			MaintanceBreaksAvgLength=1;
-			Tasks=20;
-			TasksAvgLength=250;
+			Tasks=400;
+			TasksAvgLength=2;
 			starting_population=100;
-			Duration=5000;
+			Duration=1000;
 			break;
 			case 9:
-			MaxLength=3500;
-			MaintanceBreaks=2000;
-			MaintanceBreaksAvgLength=1;
-			Tasks=50;
-			TasksAvgLength=50;
+			MaxLength=1000;
+			MaintanceBreaks=40;
+			MaintanceBreaksAvgLength=5;
+			Tasks=400;
+			TasksAvgLength=2;
 			starting_population=100;
-			Duration=5000;
+			Duration=1000;
 			break;
 		}
 		std::stringstream testname;
@@ -173,7 +178,9 @@ int main(int argc,char** argv)
 			fprintf(plik,"\n");
 		}
 		fclose(plik);
-	}*/
+		if (argc==2)return 0;
+	}
+	/*
 	printf("Przeprowadzic wszystkie testy automatycznie ? 1 - tak 0 - nie\n");
 	scanf("%d",&temp );
 	autotest=temp;
@@ -353,6 +360,6 @@ int main(int argc,char** argv)
 		}
 		fprintf(plik,"%d,%d\n",100*sum/sum2,length/powt);
 	}
-	fclose(plik);
+	fclose(plik);*/
 	return 0;
 }

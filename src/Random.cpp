@@ -48,8 +48,11 @@ Random::Random()// :rd(new std::random_device)
 	//printf("Random::Randmo\n");
 	if (error)
 	{
-	std::srand(std::time(nullptr));
-	std::shared_ptr<std::mt19937> temp( new std::mt19937(std::rand()));
+	std::srand(std::time(0));
+	unsigned long long int random;
+	for(int i=0; i < 10 ; i++) random *= std::rand();
+	for(int i=0; i < 10 ; i++) random += std::rand();
+	std::shared_ptr<std::mt19937> temp( new std::mt19937(random));
 	prandom=temp;
 	}
 	else

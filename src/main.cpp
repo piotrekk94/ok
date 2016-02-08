@@ -31,10 +31,10 @@ int main(int argc,char** argv)
 	//////////////////////////////
 
 	std::vector<std::vector<Solution>> vsolutions;
-  //plik=fopen("test.csv","w");
+    plik=fopen("test.csv","w");
 	bool roulette=false,load=false,save=false,randanswer=false,params=false,savebest=false,autotest=false;
 
-	for (int n=0;n<10;n++){
+	/*for (int n=0;n<10;n++){
 		if (argc==2){
 			n=argv[1][0]-'0';
 			printf("%d\n",n );
@@ -180,11 +180,10 @@ int main(int argc,char** argv)
 		}
 		fclose(plik);
 		if (argc==2)return 0;
-	}
-	/*
-	printf("Przeprowadzic wszystkie testy automatycznie ? 1 - tak 0 - nie\n");
-	scanf("%d",&temp );
-	autotest=temp;
+	}*/
+	//printf("Przeprowadzic wszystkie testy automatycznie ? 1 - tak 0 - nie\n");
+	//scanf("%d",&temp );
+	//autotest=temp;
 	if (!autotest){
 		printf("Zaladowac instancje ? 1 - tak 0 - nie\n");
 		scanf("%d",&temp );
@@ -364,6 +363,6 @@ int main(int argc,char** argv)
 		}
 		fprintf(plik,"%d,%d\n",100*sum/sum2,length/powt);
 	}
-	fclose(plik);*/
+	fclose(plik);
 	return 0;
 }

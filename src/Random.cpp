@@ -34,7 +34,6 @@ Random::Random()// :rd(new std::random_device)
 	bool error = false;
 #ifdef _WIN32
 	error = true;
-	printf("windows");
 #endif
 	std::shared_ptr<std::random_device> rd;
 	try
@@ -53,6 +52,7 @@ Random::Random()// :rd(new std::random_device)
 	unsigned long long int random;
 	for(int i=0; i < 10 ; i++) random *= std::rand();
 	for(int i=0; i < 10 ; i++) random += std::rand();
+	printf("%llu\n",random);
 	std::shared_ptr<std::mt19937> temp( new std::mt19937(random));
 	prandom=temp;
 	}

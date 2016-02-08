@@ -31,6 +31,7 @@ Random::~Random()
 Random::Random()// :rd(new std::random_device)
 {
 
+	static int count;
 	bool error = false;
 #ifdef _WIN32
 	error = true;
@@ -48,7 +49,8 @@ Random::Random()// :rd(new std::random_device)
 	//printf("Random::Randmo\n");
 	if (error)
 	{
-	std::srand(std::time(0));
+	if (count == 0) std::srand(std::time(0));
+	count++;
 	unsigned long long int random;
 	for(int i=0; i < 10 ; i++) random *= std::rand();
 	for(int i=0; i < 10 ; i++) random += std::rand();

@@ -135,9 +135,10 @@ int main(int argc,char** argv)
 		std::stringstream testname;
 		testname<<"test"<<n<<".csv";
 		plik=fopen(testname.str().c_str(),"w");
+		Random op(TasksAvgLength*(1-MAX_DEVIATION_FROM_AVG),TasksAvgLength*(1+MAX_DEVIATION_FROM_AVG),1);
 		for(int i=0; i < powt ; i++)
 		{
-			Generator gen(MaxLength,MaintanceBreaks,MaintanceBreaksAvgLength,Tasks,TasksAvgLength,starting_population);
+			Generator gen(MaxLength,MaintanceBreaks,MaintanceBreaksAvgLength,Tasks,TasksAvgLength,starting_population,&op);
 			std::vector<Solution> solutions=gen.GenerateSolution();
 			vsolutions.push_back(solutions);
 			printf("%d\n",i);
@@ -303,19 +304,22 @@ int main(int argc,char** argv)
 			inst=temp.Load_Instance((si.str()).c_str());
 			Tasks=inst.task.size();
 			MaintanceBreaks=inst.maintance.size();
-			Generator gen(MaxLength,MaintanceBreaks,MaintanceBreaksAvgLength,Tasks,TasksAvgLength,starting_population);
+			Random op(TasksAvgLength*(1-MAX_DEVIATION_FROM_AVG),TasksAvgLength*(1+MAX_DEVIATION_FROM_AVG),1);
+			Generator gen(MaxLength,MaintanceBreaks,MaintanceBreaksAvgLength,Tasks,TasksAvgLength,starting_population,&op);
 			gen.ReplaceBreaks(inst);
 			gen.ReplaceTasks(inst);
 			std::vector<Solution> solutions=gen.GenerateSolution();
 			vsolutions.push_back(solutions);
 		}
-		else
+		else{
+            Random op(TasksAvgLength*(1-MAX_DEVIATION_FROM_AVG),TasksAvgLength*(1+MAX_DEVIATION_FROM_AVG),1);
 			for (int j=0;j<10;j++){
-				Generator gen(MaxLength,MaintanceBreaks,MaintanceBreaksAvgLength,Tasks,TasksAvgLength,starting_population);
+				Generator gen(MaxLength,MaintanceBreaks,MaintanceBreaksAvgLength,Tasks,TasksAvgLength,starting_population,&op);
 				std::vector<Solution> solutions=gen.GenerateSolution();
 				vsolutions.push_back(solutions);
 				if (!autotest)break;
 			}
+		}
 		if (save)
 		{
 			if (autotest)
